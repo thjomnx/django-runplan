@@ -11,7 +11,7 @@ class AppointmentAdmin(admin.ModelAdmin):
         ('Track info', {'fields': ['meeting_date', 'starting_point', 'track_name']}),
         ('Other', {'fields': ['track_length', 'details'], 'classes': ['collapse']}),
     ]
-    list_display = ('meeting_date', 'create_date', 'last_change')
+    list_display = ('track_name', 'create_date', 'last_change')
     list_filter = ['meeting_date']
     inlines = [CommentInline]
 

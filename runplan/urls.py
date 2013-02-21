@@ -8,5 +8,4 @@ urlpatterns = patterns('runplan.views',
     #url(r'^(?P<runplan_id>\d+)/revoke/$', 'revoke'),
     #url(r'^(?P<runplan_id>\d+)/bookseat/$', 'bookseat'),
     #url(r'^(?P<runplan_id>\d+)/cancelseat/$', 'cancelseat'),
-    url(r'^(?P<runplan_id>\d+)/comment/$', 'comment'),
 )

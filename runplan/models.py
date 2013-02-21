@@ -1,4 +1,8 @@
+import datetime
 from django.db import models
+from django.utils import timezone
+
+meettime_threshold=datetime.timedelta(minutes=15)
 
 class Appointment(models.Model):
     create_date = models.DateTimeField('creation date', auto_now_add=True)
@@ -11,6 +15,12 @@ class Appointment(models.Model):
     track_name = models.CharField(max_length=50)
     track_length = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     details = models.TextField(blank=True)
+    
+    def is_planned(self):
+        return self.meeting_date >= timezone.now() + meettime_threshold
+    
+    def is_past(self):
+        return self.meeting_date < timezone.now() + meettime_threshold
     
     def __unicode__(self):
         return unicode(self.meeting_date.strftime('%d.%m.%Y %H:%M'))
