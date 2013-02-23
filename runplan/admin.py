@@ -16,4 +16,3 @@ class AppointmentAdmin(admin.ModelAdmin):
     inlines = [CommentInline]
 
 admin.site.register(Appointment, AppointmentAdmin)
-admin.site.register(Comment)
