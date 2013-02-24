@@ -5,7 +5,7 @@ from runplan.forms import AppointmentForm, CommentForm
 from runplan.models import Appointment, Comment
 
 def index(request):
-    run_list = Appointment.objects.all().order_by('-create_date')[:5]
+    run_list = Appointment.objects.all().order_by('-meeting_date')[:5]
     
     return render_to_response('runplan/index.html', {
         'run_list': run_list,
