@@ -33,3 +33,8 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Eric4 stuff
+.eric4project
+*.e4p
+*.e4m
