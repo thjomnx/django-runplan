@@ -46,5 +46,6 @@ def detail(request, runplan_id):
     return render(request, 'runplan/detail.html', {
         'run': run,
         'form': form,
+        'comment_list': run.comment_set.all(),
         'index_link': reverse('runplan.views.index'),
     })
