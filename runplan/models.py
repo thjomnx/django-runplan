@@ -1,16 +1,16 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
 meettime_threshold=datetime.timedelta(minutes=15)
 
-class Appointment(models.Model):
+class Run(models.Model):
+    author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
     last_change = models.DateTimeField('last changed', auto_now=True)
-    creator_name = models.CharField(max_length=50)
-    creator_email = models.EmailField(blank=True)
-    creator_phone = models.CharField(max_length=30, blank=True)
+    contact_phone = models.CharField(max_length=30, blank=True)
     meeting_date = models.DateTimeField('meeting date')
     starting_point = models.CharField(max_length=50)
     track_name = models.CharField(max_length=50)
@@ -27,10 +27,10 @@ class Appointment(models.Model):
         return unicode(self.meeting_date.strftime('%d.%m.%Y %H:%M'))
 
 class Comment(models.Model):
-    appointment = models.ForeignKey(Appointment)
+    run = models.ForeignKey(Run)
+    author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
-    creator_name = models.CharField(max_length=50)
     comment_text = models.TextField(blank=True)
     
     def __unicode__(self):
-        return self.creator_name
+        return self.author.username

@@ -1,14 +1,14 @@
 from django.forms import ModelForm, DateTimeField
+from runplan.models import Run, Comment
 
-from runplan.models import Appointment, Comment
-
-class AppointmentForm(ModelForm):
+class RunForm(ModelForm):
     meeting_date = DateTimeField(input_formats=['%d.%m.%Y %H:%M'])
     
     class Meta:
-        model = Appointment
+        model = Run
+        exclude = ('author')
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        exclude = ('appointment')
+        exclude = ('run', 'author')

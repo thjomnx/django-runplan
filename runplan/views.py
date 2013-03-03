@@ -1,44 +1,49 @@
 from django.contrib.auth.decorators import login_required
+#from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response, get_object_or_404
 
-from runplan.forms import AppointmentForm, CommentForm
-from runplan.models import Appointment, Comment
+from runplan.forms import RunForm, CommentForm
+from runplan.models import Run, Comment
 
+@login_required
 def index(request):
-    run_list = Appointment.objects.all().order_by('-meeting_date')[:5]
+    run_list = Run.objects.all().order_by('-meeting_date')[:5]
     
     return render_to_response('runplan/index.html', {
         'run_list': run_list,
-        'create_link': reverse('runplan.views.create'),
     })
 
+@login_required
 def create(request):
     if request.method == 'POST':
-        form = AppointmentForm(request.POST)
+        form = RunForm(request.POST)
         
         if form.is_valid():
-            form.save()
+            r = form.save(commit=False)
+            r.author = request.user
+            r.save()
             
             return HttpResponseRedirect(reverse('runplan.views.index'))
     else:
-        form = AppointmentForm()
+        form = RunForm()
     
     return render(request, 'runplan/create.html', {
         'form': form,
-        'index_link': reverse('runplan.views.index'),
     })
 
+@login_required
 def detail(request, runplan_id):
-    run = get_object_or_404(Appointment, pk=runplan_id)
+    run = get_object_or_404(Run, pk=runplan_id)
     
     if request.method == 'POST':
         form = CommentForm(request.POST)
         
         if form.is_valid():
             c = form.save(commit=False)
-            c.appointment = run
+            c.run = run
+            c.author = request.user
             c.save()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
@@ -49,5 +54,4 @@ def detail(request, runplan_id):
         'run': run,
         'form': form,
         'comment_list': run.comment_set.all(),
-        'index_link': reverse('runplan.views.index'),
     })
