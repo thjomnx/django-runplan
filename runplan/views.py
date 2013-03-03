@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response, get_object_or_404
+
 from runplan.forms import AppointmentForm, CommentForm
 from runplan.models import Appointment, Comment
 

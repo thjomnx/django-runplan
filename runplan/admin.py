@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from runplan.models import Appointment
 from runplan.models import Comment
 
