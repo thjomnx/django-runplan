@@ -10,7 +10,7 @@ from runplan.models import Run, Comment
 def index(request):
     run_list = Run.objects.all().order_by('-meeting_date')[:5]
     
-    return render_to_response('runplan/index.html', {
+    return render(request, 'runplan/index.html', {
         'run_list': run_list,
     })
 
