@@ -24,7 +24,7 @@ class Run(models.Model):
         return self.meeting_date < timezone.now() + meettime_threshold
     
     def __unicode__(self):
-        return unicode(self.meeting_date.strftime('%d.%m.%Y %H:%M'))
+        return str(self.meeting_date.strftime('%d.%m.%Y %H:%M'))
 
 class Comment(models.Model):
     run = models.ForeignKey(Run)

@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, render_to_response, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 
 from runplan.forms import RunForm, CommentForm
-from runplan.models import Run, Comment
+from runplan.models import Run
 
 @login_required
 def index(request):
