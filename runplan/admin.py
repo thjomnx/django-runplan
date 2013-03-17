@@ -6,7 +6,7 @@ class CommentInline(admin.StackedInline):
 
 class RunAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Author info', {'fields': ['author']}), 
+        ('Author info', {'fields': ['author', 'contact_phone']}), 
         ('Track info', {'fields': ['meeting_date', 'starting_point', 'track_name', 'track_length']}),
         ('Other', {'fields': ['details'], 'classes': ['collapse']}),
     ]
