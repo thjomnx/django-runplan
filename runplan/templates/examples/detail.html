@@ -1,0 +1,33 @@
+<a href="{% url 'runplan.views.index' %}">Back to list</a>
+
+<ul>
+    <li>Created on: <b>{{ run.create_date }}</b></li>
+    <li>Last update: <b>{{ run.last_change }}</b></li>
+    <li>Created by: <b>{{ run.author.first_name }} {{ run.author.last_name }}</b></li>
+    <li>Contact e-mail: <b>{{ run.author.email }}</b></li>
+    <li>Contact phone: <b>{{ run.contact_phone }}</b></li>
+    <li>Meeting date: <b>{{ run.meeting_date }}</b></li>
+    <li>Starting point: <b>{{ run.starting_point }}</b></li>
+    <li>Track name: <b>{{ run.track_name }}</b></li>
+    <li>Track length: <b>{{ run.track_length }}</b></li>
+</ul>
+
+<p>Details: {{ run.details }}</p>
+
+<form action="{% url 'runplan.views.detail' run.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Comment"/>
+</form>
+
+{% if comment_list %}
+    <h3>Comments</h3>
+    <div>
+    {% for comment in comment_list %}
+        <p><b>{{ comment.author.first_name }} {{ comment.author.last_name }}</b> wrote on {{ comment.create_date }}:</p>
+        <p>{{ comment.comment_text }}</p>
+    {% endfor %}
+    </div>
+{% else %}
+    <p>No comments yet.</p>
+{% endif %}
