@@ -10,10 +10,19 @@ from runplan.models import Run
 
 @login_required
 def index(request):
-    run_list = Run.objects.all().order_by('-meeting_date')[:5]
+    runs = Run.objects.all().order_by('-meeting_date')[:15]
+    planned_runs = []
+    past_runs = []
+    
+    for run in runs:
+        if run.is_planned():
+            planned_runs.append(run)
+        else:
+            past_runs.append(run)
     
     return render(request, 'runplan/index.html', {
-        'run_list': run_list,
+        'planned_runs': planned_runs,
+        'past_runs': past_runs,
     })
 
 @login_required
@@ -54,5 +63,5 @@ def detail(request, runplan_id):
     return render(request, 'runplan/detail.html', {
         'run': run,
         'form': form,
-        'comment_list': run.comment_set.all(),
+        'comments': run.comment_set.all(),
     })
