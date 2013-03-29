@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.forms import ModelForm, DateTimeField
 from runplan.models import Run, Comment
 
