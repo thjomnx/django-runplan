@@ -1,23 +1,23 @@
 <a href="{% url 'runplan.views.create' %}">Create new</a>
 
-{% if run_list %}
+{% if planned_runs or past_runs %}
     <h3>Planned runs</h3>
     <ul>
-    {% for run in run_list %}
-        {% if run.is_planned %}
-            <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
-        {% endif %}
+    {% for run in planned_runs %}
+        <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
+    {% empty %}
+        <p>No runs are planned.</p>
     {% endfor %}
     </ul>
 
     <h3>Past runs</h3>
     <ul>
-    {% for run in run_list %}
-        {% if run.is_past %}
-            <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
-        {% endif %}
+    {% for run in past_runs %}
+        <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
+    {% empty %}
+        <p>No past runs yet. Lazy?</p>
     {% endfor %}
     </ul>
 {% else %}
-    <p>No runs are planned.</p>
+    <p>Neither past nor planned runs yet. C'mon, get off your couch!</p>
 {% endif %}
