@@ -35,7 +35,7 @@ class Comment(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
-    comment_text = models.TextField(blank=True)
+    comment_text = models.TextField()
     
     def __str__(self):
         return self.author.username
