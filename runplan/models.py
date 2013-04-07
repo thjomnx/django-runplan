@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import datetime
 
 from django.contrib.auth.models import User
+from django.core import validators
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
@@ -18,7 +19,7 @@ class Run(models.Model):
     meeting_date = models.DateTimeField('meeting date')
     starting_point = models.CharField(max_length=50)
     track_name = models.CharField(max_length=50)
-    track_length = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    track_length = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
     details = models.TextField(blank=True)
     
     def is_planned(self):
@@ -28,7 +29,7 @@ class Run(models.Model):
         return self.meeting_date < timezone.now() + meettime_threshold
     
     def __str__(self):
-        return str(self.meeting_date.strftime('%d.%m.%Y %H:%M'))
+        return "{0}: {1}".format(str(self.meeting_date.strftime('%d.%m.%Y %H:%M')), self.track_name)
 
 @python_2_unicode_compatible
 class Comment(models.Model):
@@ -38,4 +39,43 @@ class Comment(models.Model):
     comment_text = models.TextField()
     
     def __str__(self):
-        return self.author.username
+        return "{0} on {1}".format(self.author.username, self.create_date.strftime('%d.%m.%Y %H:%M'))
+
+@python_2_unicode_compatible
+class Attendance(models.Model):
+    run = models.ForeignKey(Run)
+    author = models.ForeignKey(User)
+    remarks = models.TextField(blank=True)
+    
+    def __str__(self):
+        return "{0} on {1}".format(self.author.username, self.run)
+
+@python_2_unicode_compatible
+class Observation(models.Model):
+    run = models.ForeignKey(Run)
+    author = models.ForeignKey(User)
+    
+    def __str__(self):
+        return "{0} on {1}".format(self.author.username, self.run)
+
+@python_2_unicode_compatible
+class Transport(models.Model):
+    run = models.ForeignKey(Run)
+    author = models.ForeignKey(User)
+    create_date = models.DateTimeField('creation date', auto_now_add=True)
+    departure_date = models.DateTimeField('departure date')
+    transport_type = models.CharField(max_length=50)
+    free_seats = models.PositiveIntegerField(validators=[validators.MinValueValidator(1),])
+    remarks = models.TextField(blank=True)
+    
+    def __str__(self):
+        return "{0} on {1}".format(self.author.username, self.run)
+
+@python_2_unicode_compatible
+class Booking(models.Model):
+    transport = models.ForeignKey(Transport)
+    author = models.ForeignKey(User)
+    create_date = models.DateTimeField('creation date', auto_now_add=True)
+    
+    def __str__(self):
+        return "{0} on {1}".format(self.author.username, self.transport)
