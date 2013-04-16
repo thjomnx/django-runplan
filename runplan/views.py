@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
-from runplan.forms import RunForm, CommentForm
+from runplan.forms import RunForm, CommentForm, AttendanceForm
 from runplan.models import Run
 
 @login_required
@@ -64,4 +64,27 @@ def detail(request, runplan_id):
         'run': run,
         'form': form,
         'comments': run.comment_set.all(),
+        'attendees': run.attendance_set.all(),
+    })
+
+@login_required
+def attend(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    
+    if request.method == 'POST':
+        form = AttendanceForm(request.POST)
+        
+        if form.is_valid():
+            a = form.save(commit=False)
+            a.run = run
+            a.author = request.user
+            a.save()
+            
+            return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+    else:
+        form = AttendanceForm()
+    
+    return render(request, 'runplan/attend.html', {
+        'run': run,
+        'form': form,
     })
