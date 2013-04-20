@@ -45,6 +45,7 @@ class Comment(models.Model):
 class Attendance(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
+    create_date = models.DateTimeField('creation date', auto_now_add=True)
     remarks = models.TextField(blank=True)
     
     def __str__(self):
@@ -54,6 +55,7 @@ class Attendance(models.Model):
 class Observation(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
+    create_date = models.DateTimeField('creation date', auto_now_add=True)
     
     def __str__(self):
         return "{0} on {1}".format(self.author.username, self.run)

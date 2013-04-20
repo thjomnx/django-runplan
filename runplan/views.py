@@ -64,7 +64,8 @@ def detail(request, runplan_id):
         'run': run,
         'form': form,
         'comments': run.comment_set.all(),
-        'attendees': run.attendance_set.all(),
+        'attendances': run.attendance_set.distinct().order_by('create_date'),
+        'attendee_ids': run.attendance_set.values_list('author', flat=True),
     })
 
 @login_required
@@ -88,3 +89,13 @@ def attend(request, runplan_id):
         'run': run,
         'form': form,
     })
+
+@login_required
+def revoke(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    attendances = run.attendance_set.filter(author=request.user)
+    
+    for a in attendances:
+        a.delete()
+    
+    return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
