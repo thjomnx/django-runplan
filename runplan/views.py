@@ -28,19 +28,19 @@ def index(request):
 @login_required
 def create(request):
     if request.method == 'POST':
-        form = RunForm(request.POST)
+        create_form = RunForm(request.POST)
         
-        if form.is_valid():
-            r = form.save(commit=False)
+        if create_form.is_valid():
+            r = create_form.save(commit=False)
             r.author = request.user
             r.save()
             
             return HttpResponseRedirect(reverse('runplan.views.index'))
     else:
-        form = RunForm()
+        create_form = RunForm()
     
     return render(request, 'runplan/create.html', {
-        'form': form,
+        'create_form': create_form,
     })
 
 @login_required
@@ -48,21 +48,21 @@ def detail(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
     if request.method == 'POST':
-        form = CommentForm(request.POST)
+        comment_form = CommentForm(request.POST)
         
-        if form.is_valid():
-            c = form.save(commit=False)
+        if comment_form.is_valid():
+            c = comment_form.save(commit=False)
             c.run = run
             c.author = request.user
             c.save()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
-        form = CommentForm()
+        comment_form = CommentForm()
     
     return render(request, 'runplan/detail.html', {
         'run': run,
-        'form': form,
+        'comment_form': comment_form,
         'comments': run.comment_set.all(),
         'attendances': run.attendance_set.distinct().order_by('create_date'),
         'attendee_ids': run.attendance_set.values_list('author', flat=True),
@@ -73,21 +73,21 @@ def attend(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
     if request.method == 'POST':
-        form = AttendanceForm(request.POST)
+        attend_form = AttendanceForm(request.POST)
         
-        if form.is_valid():
-            a = form.save(commit=False)
+        if attend_form.is_valid():
+            a = attend_form.save(commit=False)
             a.run = run
             a.author = request.user
             a.save()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
-        form = AttendanceForm()
+        attend_form = AttendanceForm()
     
     return render(request, 'runplan/attend.html', {
         'run': run,
-        'form': form,
+        'attend_form': attend_form,
     })
 
 @login_required
