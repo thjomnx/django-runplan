@@ -117,7 +117,7 @@ def offertransport(request, runplan_id):
     else:
         transport_form = TransportForm()
     
-    return render(request, 'runplan/offertransport.html', {
+    return render(request, 'runplan/transport.html', {
         'run': run,
         'transport_form': transport_form,
     })
