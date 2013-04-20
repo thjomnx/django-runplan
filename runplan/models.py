@@ -37,6 +37,7 @@ class Comment(models.Model):
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
     comment_text = models.TextField()
+    auto_created = models.BooleanField(default=False)
     
     def __str__(self):
         return "{0} on {1}".format(self.author.username, self.create_date.strftime('%d.%m.%Y %H:%M'))
@@ -65,10 +66,11 @@ class Transport(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
-    departure_date = models.DateTimeField('departure date')
-    transport_type = models.CharField(max_length=50)
-    free_seats = models.PositiveIntegerField(validators=[validators.MinValueValidator(1),])
+    offered_seats = models.PositiveIntegerField(validators=[validators.MinValueValidator(1),])
     remarks = models.TextField(blank=True)
+    
+    def remaining_seats(self):
+        return self.offered_seats - len(self.booking_set.all())
     
     def __str__(self):
         return "{0} on {1}".format(self.author.username, self.run)

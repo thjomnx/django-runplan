@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
-from runplan.forms import RunForm, CommentForm, AttendanceForm
+from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
 from runplan.models import Run
 
 @login_required
@@ -63,9 +63,11 @@ def detail(request, runplan_id):
     return render(request, 'runplan/detail.html', {
         'run': run,
         'comment_form': comment_form,
-        'comments': run.comment_set.all(),
-        'attendances': run.attendance_set.distinct().order_by('create_date'),
+        'comments': run.comment_set.all().order_by('-create_date'),
+        'attendances': run.attendance_set.all().order_by('create_date'),
+        'transports': run.transport_set.all().order_by('create_date'),
         'attendee_ids': run.attendance_set.values_list('author', flat=True),
+        'transporter_ids': run.transport_set.values_list('author', flat=True),
     })
 
 @login_required
@@ -97,5 +99,37 @@ def revoke(request, runplan_id):
     
     for a in attendances:
         a.delete()
+    
+    return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+
+@login_required
+def offertransport(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    
+    if request.method == 'POST':
+        transport_form = TransportForm(request.POST)
+        
+        if transport_form.is_valid():
+            t = transport_form.save(commit=False)
+            t.run = run
+            t.author = request.user
+            t.save()
+            
+            return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+    else:
+        transport_form = TransportForm()
+    
+    return render(request, 'runplan/offertransport.html', {
+        'run': run,
+        'transport_form': transport_form,
+    })
+
+@login_required
+def canceltransport(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    transports = run.transport_set.filter(author=request.user)
+    
+    for t in transports:
+        t.delete()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
