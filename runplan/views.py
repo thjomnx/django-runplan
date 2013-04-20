@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
-from runplan.models import Run
+from runplan.models import Run, Transport, Booking
 
 @login_required
 def index(request):
@@ -66,8 +66,6 @@ def detail(request, runplan_id):
         'comments': run.comment_set.all().order_by('-create_date'),
         'attendances': run.attendance_set.all().order_by('create_date'),
         'transports': run.transport_set.all().order_by('create_date'),
-        'attendee_ids': run.attendance_set.values_list('author', flat=True),
-        'transporter_ids': run.transport_set.values_list('author', flat=True),
     })
 
 @login_required
@@ -131,5 +129,29 @@ def canceltransport(request, runplan_id):
     
     for t in transports:
         t.delete()
+    
+    return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+
+@login_required
+def takeseat(request, runplan_id, transport_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    transport = get_object_or_404(Transport, pk=transport_id)
+    
+    b = Booking()
+    b.transport = transport
+    b.author = request.user
+    b.save()
+    
+    return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+
+@login_required
+def freeseat(request, runplan_id, transport_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    transport = get_object_or_404(Transport, pk=transport_id)
+    bookings = transport.booking_set.filter(author=request.user)
+    
+    if len(bookings) > 0:
+        b = bookings[0]
+        b.delete()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))

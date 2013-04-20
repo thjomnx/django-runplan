@@ -22,6 +22,12 @@ class Run(models.Model):
     track_length = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
     details = models.TextField(blank=True)
     
+    def attendee_ids(self):
+        return self.attendance_set.values_list('author', flat=True)
+    
+    def transporter_ids(self):
+        return self.transport_set.values_list('author', flat=True)
+    
     def is_planned(self):
         return self.meeting_date >= timezone.now() + meettime_threshold
     
@@ -68,6 +74,9 @@ class Transport(models.Model):
     create_date = models.DateTimeField('creation date', auto_now_add=True)
     offered_seats = models.PositiveIntegerField(validators=[validators.MinValueValidator(1),])
     remarks = models.TextField(blank=True)
+    
+    def booker_ids(self):
+        return self.booking_set.values_list('author', flat=True)
     
     def remaining_seats(self):
         return self.offered_seats - len(self.booking_set.all())
