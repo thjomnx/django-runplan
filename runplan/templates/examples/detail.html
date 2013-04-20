@@ -1,33 +1,109 @@
-<a href="{% url 'runplan.views.index' %}">Back to list</a>
+{% extends "base.html" %}
 
+{% block title %}
+BoRun - Details of {{ run.track_name }} ({{ run.id }})
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'runplan.views.index' %}">Back to list</a> | 
+<a href="{% url 'runplan.views.create' %}">Create new</a>
+
+<h3>{{ run.track_name }}</h3>
 <ul>
     <li>Created on: <b>{{ run.create_date }}</b></li>
     <li>Last update: <b>{{ run.last_change }}</b></li>
     <li>Created by: <b>{{ run.author.first_name }} {{ run.author.last_name }}</b></li>
     <li>Contact e-mail: <b>{{ run.author.email }}</b></li>
-    <li>Contact phone: <b>{{ run.contact_phone }}</b></li>
+    <li>Contact phone: <b>{{ run.contact_phone|default:"--" }}</b></li>
     <li>Meeting date: <b>{{ run.meeting_date }}</b></li>
     <li>Starting point: <b>{{ run.starting_point }}</b></li>
-    <li>Track name: <b>{{ run.track_name }}</b></li>
     <li>Track length: <b>{{ run.track_length }}</b></li>
 </ul>
 
 <p>Details: {{ run.details }}</p>
 
+<h3>Attendees</h3>
+{% if run.is_planned %}
+    {% if user.id in run.attendee_ids %}
+        <p><a href="{% url 'runplan.views.revoke' run.id %}">Revoke</a></p>
+    {% else  %}
+        <p><a href="{% url 'runplan.views.attend' run.id %}">Attend</a></p>
+    {% endif %}
+{% endif %}
+
+{% if attendances %}
+    <ul>
+    {% for attendance in attendances %}
+        <li>
+            <b>{{ attendance.author.first_name }} {{ attendance.author.last_name }}</b>
+            <p>{{ attendance.remarks }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    {% if run.is_planned %}
+        <p>No attendances yet.</p>
+    {% else %}
+        <p>Nobody was in.</p>
+    {% endif %}
+{% endif %}
+
+<h3>Transport offers</h3>
+{% if run.is_planned %}
+    {% if user.id in run.transporter_ids %}
+        <p><a href="{% url 'runplan.views.canceltransport' run.id %}">Cancel transport</a></p>
+    {% else  %}
+        <p><a href="{% url 'runplan.views.offertransport' run.id %}">Offer transport</a></p>
+    {% endif %}
+{% endif %}
+
+{% if transports %}
+    <ul>
+    {% for transport in transports %}
+        <li>
+            <b>{{ transport.author.first_name }} {{ transport.author.last_name }}</b> offered on {{ transport.create_date }}
+            <p>{{ transport.remarks }}</p>
+            <p>
+                Free seats: {{ transport.remaining_seats }}/{{ transport.offered_seats }}
+                {% if transport.remaining_seats > 0 %}
+                    <a href="{% url 'runplan.views.takeseat' run.id transport.id %}">Take seat</a>
+                {% endif %}
+                
+                {% if user.id in transport.booker_ids %}
+                    <a href="{% url 'runplan.views.freeseat' run.id transport.id %}">Free seat</a>
+                {% endif %}
+            </p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    {% if run.is_planned %}
+        <p>No transport offers yet.</p>
+    {% else %}
+        <p>No transport offers were made.</p>
+    {% endif %}
+{% endif %}
+
 <form action="{% url 'runplan.views.detail' run.id %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ comment_form.as_p }}
     <input type="submit" value="Comment"/>
 </form>
 
-{% if comment_list %}
+{% if comments %}
     <h3>Comments</h3>
     <div>
-    {% for comment in comment_list %}
-        <p><b>{{ comment.author.first_name }} {{ comment.author.last_name }}</b> wrote on {{ comment.create_date }}:</p>
+    {% for comment in comments %}
+        <p>
+            {% if forloop.first %}
+                Latest:
+            {% endif %}
+            <b>{{ comment.author.first_name }} {{ comment.author.last_name }}</b> wrote on {{ comment.create_date }}:
+        </p>
         <p>{{ comment.comment_text }}</p>
     {% endfor %}
     </div>
 {% else %}
     <p>No comments yet.</p>
 {% endif %}
+{% endblock %}

@@ -1,3 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}
+BoRun - Run overview
+{% endblock %}
+
+{% block content %}
 <a href="{% url 'runplan.views.create' %}">Create new</a>
 
 {% if planned_runs or past_runs %}
@@ -21,3 +28,4 @@
 {% else %}
     <p>Neither past nor planned runs yet. C'mon, get off your couch!</p>
 {% endif %}
+{% endblock %}

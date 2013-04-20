@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+BoRun - Attend {{ run.track_name }} ({{ run.id }})
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'runplan.views.detail' run.id %}">Back to run</a>
+
+<form action="{% url 'runplan.views.attend' run.id %}" method="post">
+    {% csrf_token %}
+    {{ attend_form.as_p }}
+    <input type="submit" value="Attend"/>
+</form>
+{% endblock %}

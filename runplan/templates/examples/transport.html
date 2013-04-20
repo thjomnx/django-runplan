@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+BoRun - Offer transport for {{ run.track_name }} ({{ run.id }})
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'runplan.views.detail' run.id %}">Back to run</a>
+
+<form action="{% url 'runplan.views.offertransport' run.id %}" method="post">
+    {% csrf_token %}
+    {{ transport_form.as_p }}
+    <input type="submit" value="Offer"/>
+</form>
+{% endblock %}
