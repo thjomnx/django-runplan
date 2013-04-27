@@ -72,6 +72,14 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
                 {% if user.id in transport.booker_ids %}
                     <a href="{% url 'runplan.views.freeseat' run.id transport.id %}">Free seat</a>
                 {% endif %}
+                
+                {% if transport.booking_set.count > 0 %}
+                    <ul>
+                    {% for booker in transport.booking_set.all %}
+                        <li><b>{{ booker.author.first_name }} {{ booker.author.last_name }}</b> took seat on {{ booker.create_date }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
             </p>
         </li>
     {% endfor %}
