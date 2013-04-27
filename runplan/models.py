@@ -1,14 +1,11 @@
 from __future__ import unicode_literals
 
-import datetime
-
 from django.contrib.auth.models import User
 from django.core import validators
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
-
-meettime_threshold=datetime.timedelta(minutes=15)
+from runplan.globals import *
 
 @python_2_unicode_compatible
 class Run(models.Model):
@@ -35,7 +32,7 @@ class Run(models.Model):
         return self.meeting_date < timezone.now() + meettime_threshold
     
     def __str__(self):
-        return "{0}: {1}".format(str(self.meeting_date.strftime('%d.%m.%Y %H:%M')), self.track_name)
+        return "{0}: {1}".format(str(self.meeting_date.strftime(datetime_format)), self.track_name)
 
 @python_2_unicode_compatible
 class Comment(models.Model):
@@ -46,7 +43,7 @@ class Comment(models.Model):
     auto_created = models.BooleanField(default=False)
     
     def __str__(self):
-        return "{0} on {1}".format(self.author.username, self.create_date.strftime('%d.%m.%Y %H:%M'))
+        return "{0} on {1}".format(self.author.username, self.create_date.strftime(datetime_format))
 
 @python_2_unicode_compatible
 class Attendance(models.Model):

@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 
 from django.forms import ModelForm, DateTimeField
+from runplan.globals import *
 from runplan.models import Run, Comment, Attendance, Transport
 
 class RunForm(ModelForm):
-    meeting_date = DateTimeField(input_formats=['%d.%m.%Y %H:%M'])
+    meeting_date = DateTimeField(input_formats=[datetime_format])
     
     class Meta:
         model = Run
