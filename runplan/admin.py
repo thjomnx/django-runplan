@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+
 from runplan.models import Run, Comment, Attendance, Transport,  Booking
 
 class AttendanceInline(admin.TabularInline):

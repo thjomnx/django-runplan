@@ -5,6 +5,7 @@ from django.core import validators
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
+
 from runplan.globals import *
 
 @python_2_unicode_compatible
