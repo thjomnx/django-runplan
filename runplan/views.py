@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
@@ -21,6 +21,7 @@ def index(request):
             past_runs.append(run)
     
     return render(request, 'runplan/index.html', {
+        'runs': runs,
         'planned_runs': planned_runs,
         'past_runs': past_runs,
     })
@@ -66,6 +67,28 @@ def detail(request, runplan_id):
         'comments': run.comment_set.all().order_by('-create_date'),
         'attendances': run.attendance_set.all().order_by('create_date'),
         'transports': run.transport_set.all().order_by('create_date'),
+    })
+
+@login_required
+def edit(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.author != request.user:
+        return HttpResponseForbidden()
+    
+    if request.method == 'POST':
+        edit_form = RunForm(request.POST, instance=run)
+        
+        if edit_form.is_valid():
+            edit_form.save()
+            
+            return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+    else:
+        edit_form = RunForm(instance=run)
+    
+    return render(request, 'runplan/edit.html', {
+        'run': run,
+        'edit_form': edit_form,
     })
 
 @login_required
