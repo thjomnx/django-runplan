@@ -41,10 +41,15 @@ def create(request):
     else:
         create_form = RunForm()
     
+    contact_phones = []
     starting_points = []
     track_names = []
     
     for run in Run.objects.all():
+        if run.author == request.user:
+            if len(run.contact_phone) > 0 and run.contact_phone not in contact_phones:
+                contact_phones.append(run.contact_phone)
+        
         if run.starting_point not in starting_points:
             starting_points.append(run.starting_point)
         
@@ -53,8 +58,9 @@ def create(request):
     
     return render(request, 'runplan/create.html', {
         'create_form': create_form,
-        'starting_points': starting_points,
-        'track_names': track_names,
+        'contact_phones': sorted(contact_phones),
+        'starting_points': sorted(starting_points),
+        'track_names': sorted(track_names),
     })
 
 @login_required
