@@ -4,8 +4,82 @@
 BoRun - Edit run
 {% endblock %}
 
+{% block scripts %}
+<script>
+    $(function() {
+        $('input#id_meeting_date').datetimepicker({
+            minDate: today(),
+            hourMin: 6,
+            hourMax: 22,
+            stepMinute: 5,
+            dateFormat: 'dd.mm.yy',
+            timeFormat: 'HH:mm'
+        });
+    });
+    
+    {% if contact_phones|length > 0 %}
+        $(function() {
+            var contactPhones = [
+            {% for contact_phone in contact_phones %}"{{ contact_phone }}",{% endfor %}
+            ];
+            
+            $('input#id_contact_phone').autocomplete({
+                source: contactPhones,
+                minLength: 0
+            })
+            .bind('focus', function() { $(this).autocomplete('search'); } );
+        });
+    {% endif %}
+    
+    {% if starting_points|length > 0 %}
+        $(function() {
+            var startingPoints = [
+            {% for starting_point in starting_points %}"{{ starting_point }}",{% endfor %}
+            ];
+            
+            $('input#id_starting_point').autocomplete({
+                source: startingPoints,
+                minLength: 0
+            })
+            .bind('focus', function() { $(this).autocomplete('search'); } );
+        });
+    {% endif %}
+    
+    {% if track_names|length > 0 %}
+        $(function() {
+            var trackNames = [
+            {% for track_name in track_names %}"{{ track_name }}",{% endfor %}
+            ];
+            
+            $('input#id_track_name').autocomplete({
+                source: trackNames,
+                minLength: 0
+            })
+            .bind('focus', function() { $(this).autocomplete('search'); } );
+        });
+    {% endif %}
+    
+    $(function() {
+        var input = $('input#id_track_length');
+        var slider = $('<div id="slider_track_length"></div>').insertAfter(input).slider({
+            min: 0.1,
+            max: 42.0,
+            step: 0.1,
+            value: input.val(),
+            slide: function(event, ui) {
+                input.val(ui.value);
+            }
+        });
+        
+        input.change(function() {
+            slider.slider('value', this.value);
+        });
+    });
+</script>
+{% endblock %}
+
 {% block content %}
-<a href="{% url 'runplan.views.detail' run.id %}">Back to run</a>
+<a href="{% url 'runplan.views.detail' run.id %}" class="button">Back to run</a>
 
 <form action="{% url 'runplan.views.edit' run.id %}" method="post">
     {% csrf_token %}

@@ -4,8 +4,19 @@
 BoRun - Offer transport for {{ run.track_name }} ({{ run.id }})
 {% endblock %}
 
+{% block scripts %}
+<script>
+    $(function() {
+        $('input#id_offered_seats').spinner({
+            min: 1,
+            max: 8
+        });
+    });
+</script>
+{% endblock %}
+
 {% block content %}
-<a href="{% url 'runplan.views.detail' run.id %}">Back to run</a>
+<a href="{% url 'runplan.views.detail' run.id %}" class="button">Back to run</a>
 
 <form action="{% url 'runplan.views.offertransport' run.id %}" method="post">
     {% csrf_token %}

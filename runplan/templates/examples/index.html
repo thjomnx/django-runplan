@@ -5,26 +5,30 @@ BoRun - Run overview
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'runplan.views.create' %}">Create new</a>
+<a href="{% url 'runplan.views.create' %}" class="button">Create new</a>
 
-{% if planned_runs or past_runs %}
+{% if all_runs|length > 0 %}
     <h3>Planned runs</h3>
-    <ul>
-    {% for run in planned_runs %}
-        <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
-    {% empty %}
+    {% if planned_runs|length > 0 %}
+        <ul>
+        {% for run in planned_runs %}
+            <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
         <p>No runs are planned.</p>
-    {% endfor %}
-    </ul>
+    {% endif %}
 
     <h3>Past runs</h3>
-    <ul>
-    {% for run in past_runs %}
-        <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
-    {% empty %}
+    {% if past_runs|length > 0 %}
+        <ul>
+        {% for run in past_runs %}
+            <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
         <p>No past runs yet. Lazy?</p>
-    {% endfor %}
-    </ul>
+    {% endif %}
 {% else %}
     <p>Neither past nor planned runs yet. C'mon, get off your couch!</p>
 {% endif %}

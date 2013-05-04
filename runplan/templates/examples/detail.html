@@ -5,10 +5,15 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'runplan.views.index' %}">Back to list</a> | 
-<a href="{% url 'runplan.views.create' %}">Create new</a>
+<a href="{% url 'runplan.views.index' %}" class="button">Back to list</a>
+<a href="{% url 'runplan.views.create' %}" class="button">Create new</a>
 
 <h3>{{ run.track_name }}</h3>
+
+{% if run.is_planned and run.author.id == user.id %}
+    <a href="{% url 'runplan.views.edit' run.id %}" class="button">Edit run</a>
+{% endif %}
+
 <ul>
     <li>Created on: <b>{{ run.create_date }}</b></li>
     <li>Last update: <b>{{ run.last_change }}</b></li>
@@ -25,9 +30,9 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
 <h3>Attendees</h3>
 {% if run.is_planned %}
     {% if user.id in run.attendee_ids %}
-        <p><a href="{% url 'runplan.views.revoke' run.id %}">Revoke</a></p>
+        <a href="{% url 'runplan.views.revoke' run.id %}" class="button">Revoke</a>
     {% else  %}
-        <p><a href="{% url 'runplan.views.attend' run.id %}">Attend</a></p>
+        <a href="{% url 'runplan.views.attend' run.id %}" class="button">Attend</a>
     {% endif %}
 {% endif %}
 
@@ -51,9 +56,9 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
 <h3>Transport offers</h3>
 {% if run.is_planned %}
     {% if user.id in run.transporter_ids %}
-        <p><a href="{% url 'runplan.views.canceltransport' run.id %}">Cancel transport</a></p>
+        <a href="{% url 'runplan.views.canceltransport' run.id %}" class="button">Cancel transport</a>
     {% else  %}
-        <p><a href="{% url 'runplan.views.offertransport' run.id %}">Offer transport</a></p>
+        <a href="{% url 'runplan.views.offertransport' run.id %}" class="button">Offer transport</a>
     {% endif %}
 {% endif %}
 
@@ -66,11 +71,11 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
             <p>
                 Free seats: {{ transport.remaining_seats }}/{{ transport.offered_seats }}
                 {% if transport.remaining_seats > 0 %}
-                    <a href="{% url 'runplan.views.takeseat' run.id transport.id %}">Take seat</a>
+                    <a href="{% url 'runplan.views.takeseat' run.id transport.id %}" class="button">Take seat</a>
                 {% endif %}
                 
                 {% if user.id in transport.booker_ids %}
-                    <a href="{% url 'runplan.views.freeseat' run.id transport.id %}">Free seat</a>
+                    <a href="{% url 'runplan.views.freeseat' run.id transport.id %}" class="button">Free seat</a>
                 {% endif %}
                 
                 {% if transport.booking_set.count > 0 %}
