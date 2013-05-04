@@ -4,13 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
 
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
 from runplan.models import Run, Transport, Booking
 
 @login_required
 def index(request):
-    runs = Run.objects.all().order_by('-meeting_date')[:15]
+    runs = Run.objects.order_by('-meeting_date')[:15]
     planned_runs = []
     past_runs = []
     
@@ -21,7 +22,7 @@ def index(request):
             past_runs.append(run)
     
     return render(request, 'runplan/index.html', {
-        'runs': runs,
+        'all_runs': runs,
         'planned_runs': planned_runs,
         'past_runs': past_runs,
     })
@@ -40,8 +41,20 @@ def create(request):
     else:
         create_form = RunForm()
     
+    starting_points = []
+    track_names = []
+    
+    for run in Run.objects.all():
+        if run.starting_point.strip() not in starting_points:
+            starting_points.append(run.starting_point.strip())
+        
+        if run.track_name.strip() not in track_names:
+            track_names.append(run.track_name.strip())
+    
     return render(request, 'runplan/create.html', {
         'create_form': create_form,
+        'starting_points': starting_points,
+        'track_names': track_names,
     })
 
 @login_required
@@ -80,7 +93,9 @@ def edit(request, runplan_id):
         edit_form = RunForm(request.POST, instance=run)
         
         if edit_form.is_valid():
-            edit_form.save()
+            r = edit_form.save(commit=False)
+            r.last_change = timezone.now()
+            r.save()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
