@@ -45,11 +45,11 @@ def create(request):
     track_names = []
     
     for run in Run.objects.all():
-        if run.starting_point.strip() not in starting_points:
-            starting_points.append(run.starting_point.strip())
+        if run.starting_point not in starting_points:
+            starting_points.append(run.starting_point)
         
-        if run.track_name.strip() not in track_names:
-            track_names.append(run.track_name.strip())
+        if run.track_name not in track_names:
+            track_names.append(run.track_name)
     
     return render(request, 'runplan/create.html', {
         'create_form': create_form,
