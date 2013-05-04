@@ -11,7 +11,7 @@ from runplan.models import Run, Transport, Booking
 
 @login_required
 def index(request):
-    runs = Run.objects.order_by('-meeting_date')[:15]
+    runs = Run.objects.order_by('meeting_date')[:15]
     planned_runs = []
     past_runs = []
     
@@ -19,7 +19,7 @@ def index(request):
         if run.is_planned():
             planned_runs.append(run)
         else:
-            past_runs.append(run)
+            past_runs.insert(0, run)
     
     return render(request, 'runplan/index.html', {
         'all_runs': runs,

@@ -17,7 +17,7 @@ class Run(models.Model):
     meeting_date = models.DateTimeField('meeting date')
     starting_point = models.CharField(max_length=50)
     track_name = models.CharField(max_length=50)
-    track_length = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
+    track_length = models.DecimalField(default=0.1, max_digits=5, decimal_places=2, blank=True)
     details = models.TextField(blank=True)
     
     def attendee_ids(self):
