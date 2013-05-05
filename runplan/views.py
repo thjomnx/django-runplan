@@ -6,20 +6,17 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
+from runplan.globals import *
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
 from runplan.models import Run, Transport, Booking
 
 @login_required
 def index(request):
-    runs = Run.objects.order_by('meeting_date')[:15]
-    planned_runs = []
-    past_runs = []
+    runs = Run.objects.order_by('-meeting_date')[:index_limit]
     
-    for run in runs:
-        if run.is_planned():
-            planned_runs.append(run)
-        else:
-            past_runs.insert(0, run)
+    threshold = timezone.now() + meettime_threshold
+    planned_runs = Run.objects.filter(meeting_date__gt=threshold).order_by('meeting_date')[:index_limit]
+    past_runs = Run.objects.filter(meeting_date__lt=threshold).order_by('-meeting_date')[:index_limit]
     
     return render(request, 'runplan/index.html', {
         'all_runs': runs,
