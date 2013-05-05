@@ -9,26 +9,24 @@ BoRun - Run overview
 
 {% if all_runs|length > 0 %}
     <h3>Planned runs</h3>
-    {% if planned_runs|length > 0 %}
-        <ul>
-        {% for run in planned_runs %}
-            <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
+    {% for run in planned_runs %}
+        <p>
+            <a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a>
+            on {{ run.meeting_date }}
+        </p>
+    {% empty %}
         <p>No runs are planned.</p>
-    {% endif %}
+    {% endfor %}
 
     <h3>Past runs</h3>
-    {% if past_runs|length > 0 %}
-        <ul>
-        {% for run in past_runs %}
-            <li><a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
+    {% for run in past_runs %}
+        <p>
+            <a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a>
+            on {{ run.meeting_date }}
+        </p>
+    {% empty %}
         <p>No past runs yet. Lazy?</p>
-    {% endif %}
+    {% endfor %}
 {% else %}
     <p>Neither past nor planned runs yet. C'mon, get off your couch!</p>
 {% endif %}
