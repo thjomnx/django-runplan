@@ -164,6 +164,30 @@ def offertransport(request, runplan_id):
     })
 
 @login_required
+def edittransport(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.author != request.user:
+        return HttpResponseForbidden()
+    
+    transport = run.transport_set.get(author=request.user)
+    
+    if request.method == 'POST':
+        transport_form = TransportForm(request.POST, instance=transport)
+        
+        if transport_form.is_valid():
+            transport_form.save()
+            
+            return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+    else:
+        transport_form = TransportForm(instance=transport)
+    
+    return render(request, 'runplan/transport.html', {
+        'run': run,
+        'transport_form': transport_form,
+    })
+
+@login_required
 def canceltransport(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     transports = run.transport_set.filter(author=request.user)
