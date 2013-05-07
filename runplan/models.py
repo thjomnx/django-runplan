@@ -70,6 +70,7 @@ class Transport(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
+    #last_change = models.DateTimeField('last changed', auto_now=True)
     offered_seats = models.PositiveIntegerField(validators=[validators.MinValueValidator(1),])
     remarks = models.TextField(blank=True)
     

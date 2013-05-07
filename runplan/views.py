@@ -77,12 +77,24 @@ def detail(request, runplan_id):
     else:
         comment_form = CommentForm()
     
+    try:
+        user_attendance = run.attendance_set.get(author=request.user)
+    except Exception:
+        user_attendance = None
+    
+    try:
+        user_transport = run.transport_set.get(author=request.user)
+    except Exception:
+        user_transport = None
+    
     return render(request, 'runplan/detail.html', {
         'run': run,
         'comment_form': comment_form,
-        'comments': run.comment_set.all().order_by('-create_date'),
-        'attendances': run.attendance_set.all().order_by('create_date'),
-        'transports': run.transport_set.all().order_by('create_date'),
+        'comments': run.comment_set.order_by('-create_date'),
+        'attendances': run.attendance_set.order_by('create_date'),
+        'transports': run.transport_set.order_by('create_date'),
+        'user_attendance': user_attendance,
+        'user_transport': user_transport,
     })
 
 @login_required
@@ -96,9 +108,7 @@ def edit(request, runplan_id):
         edit_form = RunForm(request.POST, instance=run)
         
         if edit_form.is_valid():
-            r = edit_form.save(commit=False)
-            r.last_change = timezone.now()
-            r.save()
+            edit_form.save()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
@@ -142,7 +152,7 @@ def revoke(request, runplan_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-def offertransport(request, runplan_id):
+def transport_offer(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
     if request.method == 'POST':
@@ -158,19 +168,18 @@ def offertransport(request, runplan_id):
     else:
         transport_form = TransportForm()
     
-    return render(request, 'runplan/transport.html', {
+    return render(request, 'runplan/transport_offer.html', {
         'run': run,
         'transport_form': transport_form,
     })
 
 @login_required
-def edittransport(request, runplan_id):
+def transport_edit(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
+    transport = get_object_or_404(Transport, pk=transport_id)
     
-    if run.author != request.user:
+    if transport.author != request.user:
         return HttpResponseForbidden()
-    
-    transport = run.transport_set.get(author=request.user)
     
     if request.method == 'POST':
         transport_form = TransportForm(request.POST, instance=transport)
@@ -182,23 +191,23 @@ def edittransport(request, runplan_id):
     else:
         transport_form = TransportForm(instance=transport)
     
-    return render(request, 'runplan/transport.html', {
+    return render(request, 'runplan/transport_edit.html', {
         'run': run,
+        'transport': transport,
         'transport_form': transport_form,
     })
 
 @login_required
-def canceltransport(request, runplan_id):
+def transport_cancel(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
-    transports = run.transport_set.filter(author=request.user)
+    transport = get_object_or_404(Transport, pk=transport_id)
     
-    for t in transports:
-        t.delete()
+    transport.delete()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-def takeseat(request, runplan_id, transport_id):
+def transport_takeseat(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     transport = get_object_or_404(Transport, pk=transport_id)
     
@@ -210,7 +219,7 @@ def takeseat(request, runplan_id, transport_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-def freeseat(request, runplan_id, transport_id):
+def transport_freeseat(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     transport = get_object_or_404(Transport, pk=transport_id)
     bookings = transport.booking_set.filter(author=request.user)
