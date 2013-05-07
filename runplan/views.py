@@ -12,14 +12,14 @@ from runplan.models import Run, Transport, Booking
 
 @login_required
 def index(request):
-    runs = Run.objects.order_by('-meeting_date')[:index_limit]
+    all_runs = Run.objects.order_by('-meeting_date')[:index_limit]
     
     threshold = timezone.now() + meettime_threshold
     planned_runs = Run.objects.filter(meeting_date__gt=threshold).order_by('meeting_date')[:index_limit]
     past_runs = Run.objects.filter(meeting_date__lt=threshold).order_by('-meeting_date')[:index_limit]
     
     return render(request, 'runplan/index.html', {
-        'all_runs': runs,
+        'all_runs': all_runs,
         'planned_runs': planned_runs,
         'past_runs': past_runs,
     })
