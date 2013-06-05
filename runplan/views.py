@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from runplan.globals import *
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
-from runplan.models import Run, Transport, Booking
+from runplan.models import Run, Activity, Transport, Booking
 
 @login_required
 def index(request):
@@ -110,6 +110,8 @@ def edit(request, runplan_id):
         if edit_form.is_valid():
             edit_form.save()
             
+            Activity(run=run, author=request.user, code='run.edit').save()
+            
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
         edit_form = RunForm(instance=run)
@@ -127,10 +129,12 @@ def attend(request, runplan_id):
         attend_form = AttendanceForm(request.POST)
         
         if attend_form.is_valid():
-            a = attend_form.save(commit=False)
-            a.run = run
-            a.author = request.user
-            a.save()
+            att = attend_form.save(commit=False)
+            att.run = run
+            att.author = request.user
+            att.save()
+            
+            Activity(run=run, author=request.user, code='run.attend').save()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
@@ -149,6 +153,8 @@ def revoke(request, runplan_id):
     for a in attendances:
         a.delete()
     
+    Activity(run=run, author=request.user, code='run.revoke').save()
+    
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
@@ -163,6 +169,8 @@ def transport_offer(request, runplan_id):
             t.run = run
             t.author = request.user
             t.save()
+            
+            Activity(run=run, author=request.user, code='run.transport.offer').save()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
@@ -187,6 +195,8 @@ def transport_edit(request, runplan_id, transport_id):
         if transport_form.is_valid():
             transport_form.save()
             
+            Activity(run=run, author=request.user, code='run.transport.edit').save()
+            
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
         transport_form = TransportForm(instance=transport)
@@ -204,6 +214,8 @@ def transport_cancel(request, runplan_id, transport_id):
     
     transport.delete()
     
+    Activity(run=run, author=request.user, code='run.transport.cancel').save()
+    
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
@@ -216,6 +228,8 @@ def transport_takeseat(request, runplan_id, transport_id):
     b.author = request.user
     b.save()
     
+    Activity(run=run, author=request.user, code='run.transport.takeseat').save()
+    
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
@@ -227,5 +241,7 @@ def transport_freeseat(request, runplan_id, transport_id):
     if len(bookings) > 0:
         b = bookings[0]
         b.delete()
+    
+    Activity(run=run, author=request.user, code='run.transport.freeseat').save()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))

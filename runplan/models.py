@@ -36,12 +36,18 @@ class Run(models.Model):
         return "{0}: {1}".format(str(self.meeting_date.strftime(datetime_format)), self.track_name)
 
 @python_2_unicode_compatible
+class Activity(models.Model):
+    run = models.ForeignKey(Run)
+    author = models.ForeignKey(User)
+    create_date = models.DateTimeField('creation date', auto_now_add=True)
+    code = models.CharField(max_length=50)
+
+@python_2_unicode_compatible
 class Comment(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
     comment_text = models.TextField()
-    auto_created = models.BooleanField(default=False)
     
     def __str__(self):
         return "{0} on {1}".format(self.author.username, self.create_date.strftime(datetime_format))
@@ -70,7 +76,7 @@ class Transport(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
-    #last_change = models.DateTimeField('last changed', auto_now=True)
+    last_change = models.DateTimeField('last changed', auto_now=True)
     offered_seats = models.PositiveIntegerField(validators=[validators.MinValueValidator(1),])
     remarks = models.TextField(blank=True)
     
