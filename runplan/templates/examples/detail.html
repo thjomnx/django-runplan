@@ -17,7 +17,7 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
 <ul>
     <li>Created on: <b>{{ run.create_date }}</b></li>
     <li>Last update: <b>{{ run.last_change }}</b></li>
-    <li>Created by: <b>{{ run.author.first_name }} {{ run.author.last_name }}</b></li>
+    <li>Created by: <b>{{ run.author.get_full_name|default:run.author.username }}</b></li>
     <li>Contact e-mail: <b>{{ run.author.email }}</b></li>
     <li>Contact phone: <b>{{ run.contact_phone|default:"--" }}</b></li>
     <li>Meeting date: <b>{{ run.meeting_date }}</b></li>
@@ -40,7 +40,7 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
     <ul>
     {% for attendance in attendances %}
         <li>
-            <b>{{ attendance.author.first_name }} {{ attendance.author.last_name }}</b>
+            <b>{{ attendance.author.get_full_name|default:attendance.author.username }}</b>
             <p>{{ attendance.remarks }}</p>
         </li>
     {% endfor %}
@@ -67,7 +67,7 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
     <ul>
     {% for transport in transports %}
         <li>
-            <b>{{ transport.author.first_name }} {{ transport.author.last_name }}</b> offered on {{ transport.create_date }}
+            <b>{{ transport.author.get_full_name|default:transport.author.username }}</b> offered on {{ transport.create_date }}
             <p>{{ transport.remarks }}</p>
             <p>
                 Free seats: {{ transport.remaining_seats }}/{{ transport.offered_seats }}
@@ -82,7 +82,7 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
                 {% if transport.booking_set.count > 0 %}
                     <ul>
                     {% for booker in transport.booking_set.all %}
-                        <li><b>{{ booker.author.first_name }} {{ booker.author.last_name }}</b> took seat on {{ booker.create_date }}</li>
+                        <li><b>{{ booker.author.get_full_name|default:booker.author.username }}</b> took seat on {{ booker.create_date }}</li>
                     {% endfor %}
                     </ul>
                 {% endif %}
@@ -112,7 +112,7 @@ BoRun - Details of {{ run.track_name }} ({{ run.id }})
             {% if forloop.first %}
                 Latest:
             {% endif %}
-            <b>{{ comment.author.first_name }} {{ comment.author.last_name }}</b> wrote on {{ comment.create_date }}:
+            <b>{{ comment.author.get_full_name|default:comment.author.username }}</b> wrote on {{ comment.create_date }}:
         </p>
         <p>{{ comment.comment_text }}</p>
     {% endfor %}
