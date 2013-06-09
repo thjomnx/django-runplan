@@ -25,6 +25,14 @@ def index(request):
     })
 
 @login_required
+def activity(request):
+    activities = Activity.objects.order_by('-create_date')[:index_limit]
+    
+    return render(request, 'runplan/activity.html', {
+        'activities': activities,
+    })
+
+@login_required
 def create(request):
     if request.method == 'POST':
         create_form = RunForm(request.POST)
@@ -129,10 +137,10 @@ def attend(request, runplan_id):
         attend_form = AttendanceForm(request.POST)
         
         if attend_form.is_valid():
-            att = attend_form.save(commit=False)
-            att.run = run
-            att.author = request.user
-            att.save()
+            a = attend_form.save(commit=False)
+            a.run = run
+            a.author = request.user
+            a.save()
             
             Activity(run=run, author=request.user, code='run.attend').save()
             
