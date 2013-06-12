@@ -124,9 +124,27 @@ def edit(request, runplan_id):
     else:
         edit_form = RunForm(instance=run)
     
+    contact_phones = []
+    starting_points = []
+    track_names = []
+    
+    for run in Run.objects.all():
+        if run.author == request.user:
+            if len(run.contact_phone) > 0 and run.contact_phone not in contact_phones:
+                contact_phones.append(run.contact_phone)
+        
+        if run.starting_point not in starting_points:
+            starting_points.append(run.starting_point)
+        
+        if run.track_name not in track_names:
+            track_names.append(run.track_name)
+    
     return render(request, 'runplan/edit.html', {
         'run': run,
         'edit_form': edit_form,
+        'contact_phones': sorted(contact_phones),
+        'starting_points': sorted(starting_points),
+        'track_names': sorted(track_names),
     })
 
 @login_required
