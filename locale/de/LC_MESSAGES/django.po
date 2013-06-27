@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-27 20:44+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: runplan/forms.py:11 runplan/models.py:18
+msgid "meeting date"
+msgstr "Uhrzeit"
+
+#: runplan/models.py:17
+msgid "contact phone"
+msgstr "Rufnummer"
+
+#: runplan/models.py:19
+msgid "starting point"
+msgstr "Treffpunkt"
+
+#: runplan/models.py:20
+msgid "track name"
+msgstr "Strecke"
+
+#: runplan/models.py:21
+msgid "track length [km]"
+msgstr "Streckenlänge [km]"
+
+#: runplan/models.py:22
+msgid "details"
+msgstr "Details"
+
+#: runplan/models.py:51
+msgid "comment text"
+msgstr "Dein Text"
+
+#: runplan/models.py:61 runplan/models.py:82
+msgid "remarks"
+msgstr "Bemerkungen"
+
+#: runplan/models.py:81
+msgid "offered seats"
+msgstr "Angebotene Plätze"

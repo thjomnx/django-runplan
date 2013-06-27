@@ -5,6 +5,7 @@ from django.core import validators
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
 from runplan.globals import *
 
@@ -13,12 +14,12 @@ class Run(models.Model):
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
     last_change = models.DateTimeField('last changed', auto_now=True)
-    contact_phone = models.CharField(max_length=30, blank=True)
-    meeting_date = models.DateTimeField('meeting date')
-    starting_point = models.CharField(max_length=50)
-    track_name = models.CharField(max_length=50)
-    track_length = models.DecimalField(default=0.1, max_digits=5, decimal_places=2, blank=True)
-    details = models.TextField(blank=True)
+    contact_phone = models.CharField(_('contact phone'), max_length=30, blank=True)
+    meeting_date = models.DateTimeField(_('meeting date'))
+    starting_point = models.CharField(_('starting point'), max_length=50)
+    track_name = models.CharField(_('track name'), max_length=50)
+    track_length = models.DecimalField(_('track length [km]'), default=0.1, max_digits=5, decimal_places=2, blank=True)
+    details = models.TextField(_('details'), blank=True)
     
     def attendee_ids(self):
         return self.attendance_set.values_list('author', flat=True)
@@ -47,7 +48,7 @@ class Comment(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
-    comment_text = models.TextField()
+    comment_text = models.TextField(_('comment text'))
     
     def __str__(self):
         return "{0} on {1}".format(self.author.username, self.create_date.strftime(datetime_format))
@@ -57,7 +58,7 @@ class Attendance(models.Model):
     run = models.ForeignKey(Run)
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
-    remarks = models.TextField(blank=True)
+    remarks = models.TextField(_('remarks'), blank=True)
     
     def __str__(self):
         return "{0} on {1}".format(self.author.username, self.run)
@@ -77,8 +78,8 @@ class Transport(models.Model):
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
     last_change = models.DateTimeField('last changed', auto_now=True)
-    offered_seats = models.PositiveIntegerField(validators=[validators.MinValueValidator(1),])
-    remarks = models.TextField(blank=True)
+    offered_seats = models.PositiveIntegerField(_('offered seats'), default=1, validators=[validators.MinValueValidator(1),])
+    remarks = models.TextField(_('remarks'), blank=True)
     
     def booker_ids(self):
         return self.booking_set.values_list('author', flat=True)

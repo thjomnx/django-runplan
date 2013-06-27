@@ -42,6 +42,8 @@ def create(request):
             r.author = request.user
             r.save()
             
+            Activity(run=r, author=request.user, code='run.create').save()
+            
             return HttpResponseRedirect(reverse('runplan.views.index'))
     else:
         create_form = RunForm()
@@ -50,16 +52,16 @@ def create(request):
     starting_points = []
     track_names = []
     
-    for run in Run.objects.all():
-        if run.author == request.user:
-            if len(run.contact_phone) > 0 and run.contact_phone not in contact_phones:
-                contact_phones.append(run.contact_phone)
+    for r in Run.objects.all():
+        if r.author == request.user:
+            if len(r.contact_phone) > 0 and r.contact_phone not in contact_phones:
+                contact_phones.append(r.contact_phone)
         
-        if run.starting_point not in starting_points:
-            starting_points.append(run.starting_point)
+        if r.starting_point not in starting_points:
+            starting_points.append(r.starting_point)
         
-        if run.track_name not in track_names:
-            track_names.append(run.track_name)
+        if r.track_name not in track_names:
+            track_names.append(r.track_name)
     
     return render(request, 'runplan/create.html', {
         'create_form': create_form,
@@ -128,16 +130,16 @@ def edit(request, runplan_id):
     starting_points = []
     track_names = []
     
-    for run in Run.objects.all():
-        if run.author == request.user:
-            if len(run.contact_phone) > 0 and run.contact_phone not in contact_phones:
-                contact_phones.append(run.contact_phone)
+    for r in Run.objects.all():
+        if r.author == request.user:
+            if len(r.contact_phone) > 0 and r.contact_phone not in contact_phones:
+                contact_phones.append(r.contact_phone)
         
-        if run.starting_point not in starting_points:
-            starting_points.append(run.starting_point)
+        if r.starting_point not in starting_points:
+            starting_points.append(r.starting_point)
         
-        if run.track_name not in track_names:
-            track_names.append(run.track_name)
+        if r.track_name not in track_names:
+            track_names.append(r.track_name)
     
     return render(request, 'runplan/edit.html', {
         'run': run,
