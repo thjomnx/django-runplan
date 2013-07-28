@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
@@ -10,7 +11,13 @@ from runplan.globals import *
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
 from runplan.models import Run, Activity, Transport, Booking
 
+def is_runplan_user(user):
+    runplan_group = get_object_or_404(Group, name=groupname)
+    
+    return runplan_group in user.groups.all()
+
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def index(request):
     all_runs = Run.objects.order_by('-meeting_date')[:index_limit]
     
@@ -25,6 +32,7 @@ def index(request):
     })
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def activity(request):
     activities = Activity.objects.order_by('-create_date')[:index_limit]
     
@@ -33,6 +41,7 @@ def activity(request):
     })
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def create(request):
     if request.method == 'POST':
         create_form = RunForm(request.POST)
@@ -71,6 +80,7 @@ def create(request):
     })
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def detail(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -108,6 +118,7 @@ def detail(request, runplan_id):
     })
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def edit(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -150,6 +161,7 @@ def edit(request, runplan_id):
     })
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def attend(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -174,6 +186,7 @@ def attend(request, runplan_id):
     })
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def revoke(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     attendances = run.attendance_set.filter(author=request.user)
@@ -186,6 +199,7 @@ def revoke(request, runplan_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_offer(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -210,6 +224,7 @@ def transport_offer(request, runplan_id):
     })
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_edit(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     transport = get_object_or_404(Transport, pk=transport_id)
@@ -236,6 +251,7 @@ def transport_edit(request, runplan_id, transport_id):
     })
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_cancel(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     transport = get_object_or_404(Transport, pk=transport_id)
@@ -247,6 +263,7 @@ def transport_cancel(request, runplan_id, transport_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_takeseat(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     transport = get_object_or_404(Transport, pk=transport_id)
@@ -261,6 +278,7 @@ def transport_takeseat(request, runplan_id, transport_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_freeseat(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     transport = get_object_or_404(Transport, pk=transport_id)
