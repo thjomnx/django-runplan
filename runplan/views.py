@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
@@ -10,11 +9,6 @@ from django.utils import timezone
 from runplan.globals import *
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
 from runplan.models import Run, Activity, Transport, Booking
-
-def is_runplan_user(user):
-    runplan_group = get_object_or_404(Group, name=groupname)
-    
-    return runplan_group in user.groups.all()
 
 @login_required
 @user_passes_test(is_runplan_user, login_url=noperm_target)
