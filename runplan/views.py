@@ -19,7 +19,12 @@ def index(request):
     planned_runs = Run.objects.filter(meeting_date__gt=threshold).order_by('meeting_date')[:index_limit]
     past_runs = Run.objects.filter(meeting_date__lt=threshold).order_by('-meeting_date')[:index_limit]
     
-    return render(request, 'runplan/index.html', {
+    if request.mobile:
+        template = 'runplan/index-mobile.html'
+    else:
+        template = 'runplan/index.html'
+    
+    return render(request, template, {
         'all_runs': all_runs,
         'planned_runs': planned_runs,
         'past_runs': past_runs,
@@ -30,7 +35,12 @@ def index(request):
 def activity(request):
     activities = Activity.objects.order_by('-create_date')[:index_limit]
     
-    return render(request, 'runplan/activity.html', {
+    if request.mobile:
+        template = 'runplan/activity-mobile.html'
+    else:
+        template = 'runplan/activity.html'
+    
+    return render(request, template, {
         'activities': activities,
     })
 
@@ -66,7 +76,12 @@ def create(request):
         if r.track_name not in track_names:
             track_names.append(r.track_name)
     
-    return render(request, 'runplan/create.html', {
+    if request.mobile:
+        template = 'runplan/create-mobile.html'
+    else:
+        template = 'runplan/create.html'
+    
+    return render(request, template, {
         'create_form': create_form,
         'contact_phones': sorted(contact_phones),
         'starting_points': sorted(starting_points),
@@ -101,7 +116,12 @@ def detail(request, runplan_id):
     except Exception:
         user_transport = None
     
-    return render(request, 'runplan/detail.html', {
+    if request.mobile:
+        template = 'runplan/detail-mobile.html'
+    else:
+        template = 'runplan/detail.html'
+    
+    return render(request, template, {
         'run': run,
         'comment_form': comment_form,
         'comments': run.comment_set.order_by('-create_date'),
