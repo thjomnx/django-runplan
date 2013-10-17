@@ -166,7 +166,12 @@ def edit(request, runplan_id):
         if r.track_name not in track_names:
             track_names.append(r.track_name)
     
-    return render(request, 'runplan/edit.html', {
+    if request.mobile:
+        template = 'runplan/edit-mobile.html'
+    else:
+        template = 'runplan/edit.html'
+    
+    return render(request, template, {
         'run': run,
         'edit_form': edit_form,
         'contact_phones': sorted(contact_phones),
@@ -194,7 +199,12 @@ def attend(request, runplan_id):
     else:
         attend_form = AttendanceForm()
     
-    return render(request, 'runplan/attend.html', {
+    if request.mobile:
+        template = 'runplan/attend-mobile.html'
+    else:
+        template = 'runplan/attend.html'
+    
+    return render(request, template, {
         'run': run,
         'attend_form': attend_form,
     })
@@ -232,7 +242,12 @@ def transport_offer(request, runplan_id):
     else:
         transport_form = TransportForm()
     
-    return render(request, 'runplan/transport_offer.html', {
+    if request.mobile:
+        template = 'runplan/transport_offer-mobile.html'
+    else:
+        template = 'runplan/transport_offer.html'
+    
+    return render(request, template, {
         'run': run,
         'transport_form': transport_form,
     })
@@ -258,7 +273,12 @@ def transport_edit(request, runplan_id, transport_id):
     else:
         transport_form = TransportForm(instance=transport)
     
-    return render(request, 'runplan/transport_edit.html', {
+    if request.mobile:
+        template = 'runplan/transport_edit-mobile.html'
+    else:
+        template = 'runplan/transport_edit.html'
+    
+    return render(request, template, {
         'run': run,
         'transport': transport,
         'transport_form': transport_form,
