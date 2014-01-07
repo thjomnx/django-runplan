@@ -5,12 +5,14 @@ from django.utils.translation import ugettext_lazy as _
 
 from runplan.globals import *
 from runplan.models import Run, Comment, Attendance, Transport
+from runplan.validators import *
 
 class RunForm(ModelForm):
     meeting_date = DateTimeField(
         label=_('meeting date'),
         widget=DateTimeInput(format=datetime_format),
-        input_formats=[datetime_format]
+        input_formats=[datetime_format],
+        validators=[validate_future]
     )
     
     class Meta:

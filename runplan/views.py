@@ -9,6 +9,7 @@ from django.utils import timezone
 from runplan.globals import *
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
 from runplan.models import Run, Activity, Transport, Booking
+from runplan.utils import *
 
 @login_required
 @user_passes_test(is_runplan_user, login_url=noperm_target)
@@ -61,20 +62,7 @@ def create(request):
     else:
         create_form = RunForm()
     
-    contact_phones = []
-    starting_points = []
-    track_names = []
-    
-    for r in Run.objects.all():
-        if r.author == request.user:
-            if len(r.contact_phone) > 0 and r.contact_phone not in contact_phones:
-                contact_phones.append(r.contact_phone)
-        
-        if r.starting_point not in starting_points:
-            starting_points.append(r.starting_point)
-        
-        if r.track_name not in track_names:
-            track_names.append(r.track_name)
+    contact_phones, starting_points, track_names = autofill_values(request.user)
     
     if request.mobile:
         template = 'runplan/create-mobile.html'
@@ -151,20 +139,7 @@ def edit(request, runplan_id):
     else:
         edit_form = RunForm(instance=run)
     
-    contact_phones = []
-    starting_points = []
-    track_names = []
-    
-    for r in Run.objects.all():
-        if r.author == request.user:
-            if len(r.contact_phone) > 0 and r.contact_phone not in contact_phones:
-                contact_phones.append(r.contact_phone)
-        
-        if r.starting_point not in starting_points:
-            starting_points.append(r.starting_point)
-        
-        if r.track_name not in track_names:
-            track_names.append(r.track_name)
+    contact_phones, starting_points, track_names = autofill_values(request.user)
     
     if request.mobile:
         template = 'runplan/edit-mobile.html'
@@ -174,6 +149,44 @@ def edit(request, runplan_id):
     return render(request, template, {
         'run': run,
         'edit_form': edit_form,
+        'contact_phones': sorted(contact_phones),
+        'starting_points': sorted(starting_points),
+        'track_names': sorted(track_names),
+    })
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
+def recreate(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.author != request.user:
+        run.contact_phone = None
+    
+    run.meeting_date = None
+    
+    if request.method == 'POST':
+        recreate_form = RunForm(request.POST)
+        
+        if recreate_form.is_valid():
+            r = recreate_form.save(commit=False)
+            r.author = request.user
+            r.save()
+            
+            Activity(run=r, author=request.user, code='run.create').save()
+            
+            return HttpResponseRedirect(reverse('runplan.views.index'))
+    else:
+        recreate_form = RunForm(instance=run)
+    
+    contact_phones, starting_points, track_names = autofill_values(request.user)
+    
+    if request.mobile:
+        template = 'runplan/create-mobile.html'
+    else:
+        template = 'runplan/create.html'
+    
+    return render(request, template, {
+        'create_form': recreate_form,
         'contact_phones': sorted(contact_phones),
         'starting_points': sorted(starting_points),
         'track_names': sorted(track_names),

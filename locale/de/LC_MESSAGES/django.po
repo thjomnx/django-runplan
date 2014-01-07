@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-27 20:44+0200\n"
+"POT-Creation-Date: 2014-01-07 21:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: runplan/forms.py:11 runplan/models.py:18
+#: runplan/forms.py:12 runplan/models.py:18
 msgid "meeting date"
 msgstr "Uhrzeit"
 
@@ -47,3 +47,7 @@ msgstr "Bemerkungen"
 #: runplan/models.py:81
 msgid "offered seats"
 msgstr "Angebotene Plätze"
+
+#: runplan/validators.py:11
+msgid "The date must be in the future."
+msgstr "Das Datum muss in der Zukunft liegen."
