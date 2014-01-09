@@ -14,7 +14,7 @@ class RunAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Author info', {'fields': ['author', 'contact_phone']}), 
         ('Track info', {'fields': ['meeting_date', 'starting_point', 'track_name', 'track_length']}),
-        ('Other', {'fields': ['details'], 'classes': ['collapse']}),
+        ('Other', {'fields': ['canceled', 'details'], 'classes': ['collapse']}),
     ]
     list_display = ('track_name', 'meeting_date', 'create_date', 'last_change')
     list_filter = ['meeting_date']
