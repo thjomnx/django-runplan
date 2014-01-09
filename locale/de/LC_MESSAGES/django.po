@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-07 21:57+0100\n"
+"POT-Creation-Date: 2014-01-09 21:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,39 +12,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: runplan/forms.py:12 runplan/models.py:18
+#: runplan/forms.py:12 runplan/models.py:19
 msgid "meeting date"
 msgstr "Uhrzeit"
 
 #: runplan/models.py:17
+msgid "canceled"
+msgstr "abgesagt"
+
+#: runplan/models.py:18
 msgid "contact phone"
 msgstr "Rufnummer"
 
-#: runplan/models.py:19
+#: runplan/models.py:20
 msgid "starting point"
 msgstr "Treffpunkt"
 
-#: runplan/models.py:20
+#: runplan/models.py:21
 msgid "track name"
 msgstr "Strecke"
 
-#: runplan/models.py:21
+#: runplan/models.py:22
 msgid "track length [km]"
 msgstr "Streckenlänge [km]"
 
-#: runplan/models.py:22
+#: runplan/models.py:23
 msgid "details"
 msgstr "Details"
 
-#: runplan/models.py:51
+#: runplan/models.py:52
 msgid "comment text"
 msgstr "Dein Text"
 
-#: runplan/models.py:61 runplan/models.py:82
+#: runplan/models.py:62 runplan/models.py:83
 msgid "remarks"
 msgstr "Bemerkungen"
 
-#: runplan/models.py:81
+#: runplan/models.py:82
 msgid "offered seats"
 msgstr "Angebotene Plätze"
 

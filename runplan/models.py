@@ -14,6 +14,7 @@ class Run(models.Model):
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
     last_change = models.DateTimeField('last changed', auto_now=True)
+    canceled = models.BooleanField(_('canceled'), default=False)
     contact_phone = models.CharField(_('contact phone'), max_length=30, blank=True)
     meeting_date = models.DateTimeField(_('meeting date'))
     starting_point = models.CharField(_('starting point'), max_length=50)

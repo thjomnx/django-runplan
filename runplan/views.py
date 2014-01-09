@@ -127,6 +127,9 @@ def edit(request, runplan_id):
     if run.author != request.user:
         return HttpResponseForbidden()
     
+    if run.canceled:
+        return HttpResponseForbidden()
+    
     if request.method == 'POST':
         edit_form = RunForm(request.POST, instance=run)
         
@@ -156,6 +159,21 @@ def edit(request, runplan_id):
 
 @login_required
 @user_passes_test(is_runplan_user, login_url=noperm_target)
+def cancel(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.author != request.user:
+        return HttpResponseForbidden()
+    
+    run.canceled = True
+    run.save()
+    
+    Activity(run=run, author=request.user, code='run.cancel').save()
+    
+    return HttpResponseRedirect(reverse('runplan.views.index'))
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
 def recreate(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -163,6 +181,7 @@ def recreate(request, runplan_id):
         run.contact_phone = None
     
     run.meeting_date = None
+    run.canceled = False
     
     if request.method == 'POST':
         recreate_form = RunForm(request.POST)
@@ -197,6 +216,9 @@ def recreate(request, runplan_id):
 def attend(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
+    if run.canceled:
+        return HttpResponseForbidden()
+    
     if request.method == 'POST':
         attend_form = AttendanceForm(request.POST)
         
@@ -226,6 +248,10 @@ def attend(request, runplan_id):
 @user_passes_test(is_runplan_user, login_url=noperm_target)
 def revoke(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.canceled:
+        return HttpResponseForbidden()
+    
     attendances = run.attendance_set.filter(author=request.user)
     
     for a in attendances:
@@ -239,6 +265,9 @@ def revoke(request, runplan_id):
 @user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_offer(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.canceled:
+        return HttpResponseForbidden()
     
     if request.method == 'POST':
         transport_form = TransportForm(request.POST)
@@ -269,6 +298,10 @@ def transport_offer(request, runplan_id):
 @user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_edit(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.canceled:
+        return HttpResponseForbidden()
+    
     transport = get_object_or_404(Transport, pk=transport_id)
     
     if transport.author != request.user:
@@ -301,8 +334,11 @@ def transport_edit(request, runplan_id, transport_id):
 @user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_cancel(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
-    transport = get_object_or_404(Transport, pk=transport_id)
     
+    if run.canceled:
+        return HttpResponseForbidden()
+    
+    transport = get_object_or_404(Transport, pk=transport_id)
     transport.delete()
     
     Activity(run=run, author=request.user, code='run.transport.cancel').save()
@@ -313,6 +349,10 @@ def transport_cancel(request, runplan_id, transport_id):
 @user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_takeseat(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.canceled:
+        return HttpResponseForbidden()
+    
     transport = get_object_or_404(Transport, pk=transport_id)
     
     b = Booking()
@@ -328,6 +368,10 @@ def transport_takeseat(request, runplan_id, transport_id):
 @user_passes_test(is_runplan_user, login_url=noperm_target)
 def transport_freeseat(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.canceled:
+        return HttpResponseForbidden()
+    
     transport = get_object_or_404(Transport, pk=transport_id)
     bookings = transport.booking_set.filter(author=request.user)
     
