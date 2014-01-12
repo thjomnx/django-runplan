@@ -17,7 +17,7 @@ class RunForm(ModelForm):
     
     class Meta:
         model = Run
-        exclude = ('author',)
+        exclude = ('author','canceled',)
     
     def clean_contact_phone(self):
         return self.cleaned_data.get('contact_phone', '').strip()
