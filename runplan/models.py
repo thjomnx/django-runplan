@@ -35,7 +35,7 @@ class Run(models.Model):
         return self.meeting_date < timezone.now() + meettime_threshold
     
     def __str__(self):
-        return "{0}: {1}".format(str(self.meeting_date.strftime(datetime_format)), self.track_name)
+        return "{0}: {1}".format(self.meeting_date.strftime(datetime_format), self.track_name)
 
 @python_2_unicode_compatible
 class Activity(models.Model):
@@ -43,6 +43,9 @@ class Activity(models.Model):
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
     code = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return "{0} on {1}".format(self.code, self.create_date.strftime(datetime_format))
 
 @python_2_unicode_compatible
 class Comment(models.Model):
