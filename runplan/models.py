@@ -7,7 +7,19 @@ from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
-from runplan.globals import *
+from runplan.settings import *
+
+@python_2_unicode_compatible
+class Settings(models.Model):
+    account = models.ForeignKey(User)
+    last_change = models.DateTimeField('last changed', auto_now=True)
+    emailon_activity = models.BooleanField(_('notify on all activity'), default=False)
+    emailon_newrun = models.BooleanField(_('notify on newly created run'), default=True)
+    emailon_modifiedrun = models.BooleanField(_('notify on modified run'), default=True)
+    emailon_canceledrun = models.BooleanField(_('notify on canceled run'), default=True)
+    
+    def __str__(self):
+        return "Settings for {0}".format(self.user.username)
 
 @python_2_unicode_compatible
 class Run(models.Model):

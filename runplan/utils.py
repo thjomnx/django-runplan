@@ -1,6 +1,13 @@
 from __future__ import unicode_literals
 
+from django.contrib.auth.models import Group
+from django.shortcuts import get_object_or_404
+
 from runplan.models import Run
+from runplan.settings import *
+
+def is_runplan_user(user):
+    return get_object_or_404(Group, name=groupname) in user.groups.all()
 
 def autofill_values(user):
     contact_phones = []

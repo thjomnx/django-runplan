@@ -6,9 +6,9 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
-from runplan.globals import *
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
 from runplan.models import Run, Activity, Transport, Booking
+from runplan.settings import *
 from runplan.utils import *
 
 @login_required

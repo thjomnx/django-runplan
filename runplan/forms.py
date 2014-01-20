@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 from django.forms import ModelForm, DateTimeField, DateTimeInput
 from django.utils.translation import ugettext_lazy as _
 
-from runplan.globals import *
 from runplan.models import Run, Comment, Attendance, Transport
+from runplan.settings import *
 from runplan.validators import *
 
 class RunForm(ModelForm):

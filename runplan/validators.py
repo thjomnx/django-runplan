@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from runplan.globals import *
+from runplan.settings import *
 
 def validate_future(value):
     if value <= timezone.now() - meettime_threshold:

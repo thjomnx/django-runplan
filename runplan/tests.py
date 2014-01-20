@@ -1,13 +1,16 @@
 from __future__ import unicode_literals
 
+import random
+import string
+
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 from django.utils import timezone
 
-from runplan.globals import *
 from runplan.models import Run
+from runplan.settings import *
 
 fake_username='fakename'
 fake_useremail='fake@fakehost.com'
@@ -16,6 +19,9 @@ fake_userpassword='fakepassword'
 fake_run_starting_point=random_string(length=24)
 fake_run_track_name=random_string(length=24)
 fake_run_track_length=0.0
+
+def random_string(length=8, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(length))
 
 class ViewsTest(TestCase):
     def setUp(self):
