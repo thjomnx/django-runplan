@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
 from runplan.models import Run, Activity, Transport, Booking
+from runplan.notifiers import Notification
 from runplan.settings import *
 from runplan.utils import *
 
@@ -57,6 +58,7 @@ def create(request):
             r.save()
             
             Activity(run=r, author=request.user, code='run.create').save()
+            Notification(request=request, run=r, code='run.create').send()
             
             return HttpResponseRedirect(reverse('runplan.views.index'))
     else:
@@ -137,6 +139,7 @@ def edit(request, runplan_id):
             edit_form.save()
             
             Activity(run=run, author=request.user, code='run.edit').save()
+            Notification(request=request, run=run, code='run.edit').send()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
@@ -169,6 +172,7 @@ def cancel(request, runplan_id):
     run.save()
     
     Activity(run=run, author=request.user, code='run.cancel').save()
+    Notification(request=request, run=run, code='run.cancel').send()
     
     return HttpResponseRedirect(reverse('runplan.views.index'))
 
@@ -192,6 +196,7 @@ def recreate(request, runplan_id):
             r.save()
             
             Activity(run=r, author=request.user, code='run.create').save()
+            Notification(request=request, run=r, code='run.create').send()
             
             return HttpResponseRedirect(reverse('runplan.views.index'))
     else:
@@ -229,6 +234,7 @@ def attend(request, runplan_id):
             a.save()
             
             Activity(run=run, author=request.user, code='run.attend').save()
+            Notification(request=request, run=run, code='run.attend').send()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
@@ -258,6 +264,7 @@ def revoke(request, runplan_id):
         a.delete()
     
     Activity(run=run, author=request.user, code='run.revoke').save()
+    Notification(request=request, run=run, code='run.revoke').send()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
@@ -279,6 +286,7 @@ def transport_offer(request, runplan_id):
             t.save()
             
             Activity(run=run, author=request.user, code='run.transport.offer').save()
+            Notification(request=request, run=run, code='run.transport.offer').send()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
@@ -314,6 +322,7 @@ def transport_edit(request, runplan_id, transport_id):
             transport_form.save()
             
             Activity(run=run, author=request.user, code='run.transport.edit').save()
+            Notification(request=request, run=run, code='run.transport.edit').send()
             
             return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     else:
@@ -342,6 +351,7 @@ def transport_cancel(request, runplan_id, transport_id):
     transport.delete()
     
     Activity(run=run, author=request.user, code='run.transport.cancel').save()
+    Notification(request=request, run=run, code='run.transport.cancel').send()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
@@ -361,6 +371,7 @@ def transport_takeseat(request, runplan_id, transport_id):
     b.save()
     
     Activity(run=run, author=request.user, code='run.transport.takeseat').save()
+    Notification(request=request, run=run, code='run.transport.takeseat').send()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
@@ -380,5 +391,6 @@ def transport_freeseat(request, runplan_id, transport_id):
         b.delete()
     
     Activity(run=run, author=request.user, code='run.transport.freeseat').save()
+    Notification(request=request, run=run, code='run.transport.freeseat').send()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))

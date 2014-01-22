@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-09 21:21+0100\n"
+"POT-Creation-Date: 2014-01-22 22:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,45 +12,127 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: runplan/forms.py:12 runplan/models.py:19
+#: runplan/forms.py:12 runplan/models.py:34
 msgid "meeting date"
 msgstr "Uhrzeit"
 
+#: runplan/models.py:16
+msgid "notify on all activity"
+msgstr "Immer benachrichtigen"
+
 #: runplan/models.py:17
+msgid "notify on newly created run"
+msgstr "Bei neuen Läufen benachrichtigen"
+
+#: runplan/models.py:18
+msgid "notify on modified run"
+msgstr "Bei Laufplanänderungen benachrichtigen"
+
+#: runplan/models.py:19
+msgid "notify on canceled run"
+msgstr "Bei abgesagten Läufen benachrichtigen"
+
+#: runplan/models.py:32
 msgid "canceled"
 msgstr "abgesagt"
 
-#: runplan/models.py:18
+#: runplan/models.py:33
 msgid "contact phone"
 msgstr "Rufnummer"
 
-#: runplan/models.py:20
+#: runplan/models.py:35
 msgid "starting point"
 msgstr "Treffpunkt"
 
-#: runplan/models.py:21
+#: runplan/models.py:36
 msgid "track name"
 msgstr "Strecke"
 
-#: runplan/models.py:22
+#: runplan/models.py:37
 msgid "track length [km]"
 msgstr "Streckenlänge [km]"
 
-#: runplan/models.py:23
+#: runplan/models.py:38
 msgid "details"
 msgstr "Details"
 
-#: runplan/models.py:52
+#: runplan/models.py:70
 msgid "comment text"
 msgstr "Dein Text"
 
-#: runplan/models.py:62 runplan/models.py:83
+#: runplan/models.py:80 runplan/models.py:101
 msgid "remarks"
 msgstr "Bemerkungen"
 
-#: runplan/models.py:82
+#: runplan/models.py:100
 msgid "offered seats"
 msgstr "Angebotene Plätze"
+
+#: runplan/settings.py:16
+msgid "[runplan] "
+msgstr "[runplan] "
+
+#: runplan/settings.py:18
+#, python-format
+msgid "%(user)s created new run %(run)s"
+msgstr "%(user)s hat %(run)s geplant"
+
+#: runplan/settings.py:19
+#, python-format
+msgid "%(user)s edited run %(run)s"
+msgstr "%(user)s hat %(run)s aktualisiert"
+
+#: runplan/settings.py:20
+#, python-format
+msgid "%(user)s canceled run %(run)s"
+msgstr "%(user)s hat %(run)s abgesagt"
+
+#: runplan/settings.py:21
+#, python-format
+msgid "%(user)s attends on run %(run)s"
+msgstr "%(user)s nimmt an %(run)s teil"
+
+#: runplan/settings.py:22
+#, python-format
+msgid "%(user)s revokes for run %(run)s"
+msgstr "%(user)s hat für %(run)s abgesagt"
+
+#: runplan/settings.py:23
+#, python-format
+msgid "%(user)s offered new transport for run %(run)s"
+msgstr "%(user)s hat für %(run)s Mitfahrgelegenheit angeboten"
+
+#: runplan/settings.py:24
+#, python-format
+msgid "%(user)s edited transport for run %(run)s"
+msgstr "%(user)s hat Mitfahrgelegenheit für %(run)s aktualisiert"
+
+#: runplan/settings.py:25
+#, python-format
+msgid "%(user)s canceled transport for run %(run)s"
+msgstr "%(user)s hat Mitfahrgelegenheit für %(run)s abgesagt"
+
+#: runplan/settings.py:26
+#, python-format
+msgid "%(user)s took seat on transport for run %(run)s"
+msgstr "%(user)s hat Platz in Mitfahrgelegenheit für %(run)s belegt"
+
+#: runplan/settings.py:27
+#, python-format
+msgid "%(user)s freed seat on transport for run %(run)s"
+msgstr "%(user)s hat Platz in Mitfahrgelegenheit für %(run)s freigegeben"
+
+#: runplan/settings.py:32
+msgid "This is an auto-generated e-mail - please do not respond!"
+msgstr "Dies ist eine automatisch generierte E-Mail - bitte nicht antworten!"
+
+#: runplan/settings.py:34 runplan/settings.py:35 runplan/settings.py:36
+#: runplan/settings.py:37 runplan/settings.py:38 runplan/settings.py:39
+#: runplan/settings.py:40 runplan/settings.py:41 runplan/settings.py:42
+#: runplan/settings.py:43
+#, python-format
+msgid "Link: %(link)s"
+msgstr "Link: %(link)s"
 
 #: runplan/validators.py:11
 msgid "The date must be in the future."

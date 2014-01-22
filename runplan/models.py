@@ -18,8 +18,11 @@ class Settings(models.Model):
     emailon_modifiedrun = models.BooleanField(_('notify on modified run'), default=True)
     emailon_canceledrun = models.BooleanField(_('notify on canceled run'), default=True)
     
+    class Meta:
+        verbose_name_plural = 'Settings'
+    
     def __str__(self):
-        return "Settings for {0}".format(self.user.username)
+        return "{0}".format(self.account.username)
 
 @python_2_unicode_compatible
 class Run(models.Model):
