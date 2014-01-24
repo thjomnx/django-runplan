@@ -17,4 +17,5 @@ urlpatterns = patterns('runplan.views',
     url(r'^(?P<runplan_id>\d+)/transport/(?P<transport_id>\d+)/cancel/$', 'transport_cancel'),
     url(r'^(?P<runplan_id>\d+)/transport/(?P<transport_id>\d+)/takeseat/$', 'transport_takeseat'),
     url(r'^(?P<runplan_id>\d+)/transport/(?P<transport_id>\d+)/freeseat/$', 'transport_freeseat'),
+    url(r'^settings/edit/$', 'settings_edit'),
 )

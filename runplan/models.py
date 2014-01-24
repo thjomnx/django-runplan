@@ -10,21 +10,6 @@ from django.utils.translation import ugettext_lazy as _
 from runplan.settings import *
 
 @python_2_unicode_compatible
-class Settings(models.Model):
-    account = models.ForeignKey(User)
-    last_change = models.DateTimeField('last changed', auto_now=True)
-    emailon_activity = models.BooleanField(_('notify on all activity'), default=False)
-    emailon_newrun = models.BooleanField(_('notify on newly created run'), default=True)
-    emailon_modifiedrun = models.BooleanField(_('notify on modified run'), default=True)
-    emailon_canceledrun = models.BooleanField(_('notify on canceled run'), default=True)
-    
-    class Meta:
-        verbose_name_plural = 'Settings'
-    
-    def __str__(self):
-        return "{0}".format(self.account.username)
-
-@python_2_unicode_compatible
 class Run(models.Model):
     author = models.ForeignKey(User)
     create_date = models.DateTimeField('creation date', auto_now_add=True)
@@ -117,3 +102,18 @@ class Booking(models.Model):
     
     def __str__(self):
         return "{0} on {1}".format(self.author.username, self.transport)
+
+@python_2_unicode_compatible
+class Settings(models.Model):
+    account = models.ForeignKey(User)
+    last_change = models.DateTimeField('last changed', auto_now=True)
+    emailon_activity = models.BooleanField(_('notify on all activity'), default=False)
+    emailon_newrun = models.BooleanField(_('notify on newly created run'), default=True)
+    emailon_modifiedrun = models.BooleanField(_('notify on modified run'), default=True)
+    emailon_canceledrun = models.BooleanField(_('notify on canceled run'), default=True)
+    
+    class Meta:
+        verbose_name_plural = 'Settings'
+    
+    def __str__(self):
+        return "{0}".format(self.account.username)

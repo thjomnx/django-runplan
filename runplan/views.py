@@ -6,8 +6,8 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
-from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm
-from runplan.models import Run, Activity, Transport, Booking
+from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm, SettingsForm
+from runplan.models import Run, Activity, Transport, Booking, Settings
 from runplan.notifiers import Notification
 from runplan.settings import *
 from runplan.utils import *
@@ -394,3 +394,29 @@ def transport_freeseat(request, runplan_id, transport_id):
     Notification(request=request, run=run, code='run.transport.freeseat').send()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
+def settings_edit(request):
+    settings = get_object_or_404(Settings, account=request.user)
+    
+    if request.method == 'POST':
+        edit_form = SettingsForm(request.POST, instance=settings)
+        
+        if edit_form.is_valid():
+            r = edit_form.save(commit=False)
+            r.author = request.user
+            r.save()
+            
+            return HttpResponseRedirect(reverse('runplan.views.index'))
+    else:
+        edit_form = SettingsForm(instance=settings)
+    
+    if request.mobile:
+        template = 'runplan/settings_edit-mobile.html'
+    else:
+        template = 'runplan/settings_edit.html'
+    
+    return render(request, template, {
+        'edit_form': edit_form,
+    })

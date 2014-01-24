@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from runplan.models import Settings, Run, Comment, Attendance, Transport,  Booking
+from runplan.models import Run, Comment, Attendance, Transport, Booking, Settings
 
 class AttendanceInline(admin.TabularInline):
     model = Attendance
@@ -26,6 +26,6 @@ class BookingInline(admin.TabularInline):
 class TransportAdmin(admin.ModelAdmin):
     inlines = [BookingInline]
 
-admin.site.register(Settings)
 admin.site.register(Run, RunAdmin)
 admin.site.register(Transport, TransportAdmin)
+admin.site.register(Settings)
