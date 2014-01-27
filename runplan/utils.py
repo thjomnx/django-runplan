@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
-from runplan.models import Run
+from runplan.models import Run, Settings
 from runplan.settings import *
 
 def is_runplan_user(user):
@@ -26,3 +27,11 @@ def autofill_values(user):
             track_names.append(r.track_name)
     
     return (contact_phones, starting_points, track_names)
+
+def finalize_account(user):
+    try:
+        s = Settings.objects.get(account=user)
+    except ObjectDoesNotExist:
+        s = Settings(account=user).save()
+    
+    return s

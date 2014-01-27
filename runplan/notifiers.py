@@ -13,6 +13,8 @@ class Notification():
         self.code = code
     
     def send(self):
+        finalize_account(self.request.user)
+        
         accounts = []
         
         for o in self.run.observation_set.all():

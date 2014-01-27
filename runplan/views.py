@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm, SettingsForm
-from runplan.models import Run, Activity, Transport, Booking, Settings
+from runplan.models import Run, Activity, Transport, Booking
 from runplan.notifiers import Notification
 from runplan.settings import *
 from runplan.utils import *
@@ -398,7 +398,7 @@ def transport_freeseat(request, runplan_id, transport_id):
 @login_required
 @user_passes_test(is_runplan_user, login_url=noperm_target)
 def settings_edit(request):
-    settings = get_object_or_404(Settings, account=request.user)
+    settings = finalize_account(request.user)
     
     if request.method == 'POST':
         edit_form = SettingsForm(request.POST, instance=settings)
