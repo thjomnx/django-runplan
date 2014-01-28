@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 
 from runplan.models import Settings
 from runplan.settings import *
+from runplan.utils import *
 
 class Notification():
     def __init__(self, request, run, code):
