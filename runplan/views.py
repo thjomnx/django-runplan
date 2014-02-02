@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
 from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm, SettingsForm
-from runplan.models import Run, Activity, Transport, Booking
+from runplan.models import Run, Activity, Observation, Transport, Booking
 from runplan.notifiers import Notification
 from runplan.settings import *
 from runplan.utils import *
@@ -102,6 +102,11 @@ def detail(request, runplan_id):
         user_attendance = None
     
     try:
+        user_observation = run.observation_set.get(author=request.user)
+    except Exception:
+        user_observation = None
+    
+    try:
         user_transport = run.transport_set.get(author=request.user)
     except Exception:
         user_transport = None
@@ -118,6 +123,7 @@ def detail(request, runplan_id):
         'attendances': run.attendance_set.order_by('create_date'),
         'transports': run.transport_set.order_by('create_date'),
         'user_attendance': user_attendance,
+        'user_observation': user_observation,
         'user_transport': user_transport,
     })
 
@@ -265,6 +271,33 @@ def revoke(request, runplan_id):
     
     Activity(run=run, author=request.user, code='run.revoke').save()
     Notification(request=request, run=run, code='run.revoke').send()
+    
+    return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
+def observe(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.canceled:
+        return HttpResponseForbidden()
+    
+    Observation(run=run, author=request.user).save()
+    
+    return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=noperm_target)
+def forget(request, runplan_id):
+    run = get_object_or_404(Run, pk=runplan_id)
+    
+    if run.canceled:
+        return HttpResponseForbidden()
+    
+    observations = run.observation_set.filter(author=request.user)
+    
+    for o in observations:
+        o.delete()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
