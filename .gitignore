@@ -37,5 +37,6 @@ nosetests.xml
 # Eric4/5 stuff
 .eric4project
 .eric5project
+.ropeproject
 *.e4p
 *.e4m
