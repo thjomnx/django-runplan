@@ -4,17 +4,17 @@ import datetime
 
 from django.utils.translation import ugettext as _
 
-groupname='runplan-users'
-noperm_target='/accounts/noperm/'
+AUTH_GROUP_NAME='runplan-users'
+NOPERM_TARGET='/accounts/noperm/'
 
-datetime_format='%d.%m.%Y %H:%M'
-meettime_threshold=datetime.timedelta(minutes=15)
-index_limit=50
+DATETIME_FORMAT='%d.%m.%Y %H:%M'
+MEETTIME_THRESHOLD=datetime.timedelta(minutes=15)
+INDEX_LIMIT=50
 
-email_from_addr = 'infobot@thjom.de'
+EMAIL_FROM_ADDR = 'infobot@thjom.de'
 
-email_subject_prefix = _('[runplan] ')
-email_subject_templates = {
+EMAIL_SUBJECT_PREFIX = _('[runplan] ')
+EMAIL_SUBJECT_TEMPLATES = {
     'run.create': _('%(user)s created new run %(run)s'),
     'run.edit': _('%(user)s edited run %(run)s'),
     'run.cancel': _('%(user)s canceled run %(run)s'),
@@ -27,10 +27,10 @@ email_subject_templates = {
     'run.transport.freeseat': _('%(user)s freed seat on transport for run %(run)s'),
 }
 
-email_body_backlink = 'http://bochumrun.hopto.org'
-email_body_header = ''
-email_body_footer = _('This is an auto-generated e-mail - please do not respond!')
-email_body_templates = {
+EMAIL_BODY_BACKLINK = 'http://bochumrun.hopto.org'
+EMAIL_BODY_HEADER = ''
+EMAIL_BODY_FOOTER = _('This is an auto-generated e-mail - please do not respond!')
+EMAIL_BODY_TEMPLATES = {
     'run.create': _("""Link: %(link)s"""),
     'run.edit': _("""Link: %(link)s"""),
     'run.cancel': _("""Link: %(link)s"""),

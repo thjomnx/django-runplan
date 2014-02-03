@@ -8,7 +8,7 @@ from runplan.models import Run, Settings
 from runplan.settings import *
 
 def is_runplan_user(user):
-    return get_object_or_404(Group, name=groupname) in user.groups.all()
+    return get_object_or_404(Group, name=AUTH_GROUP_NAME) in user.groups.all()
 
 def autofill_values(user):
     contact_phones = []

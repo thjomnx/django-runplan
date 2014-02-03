@@ -10,8 +10,8 @@ from runplan.validators import *
 class RunForm(ModelForm):
     meeting_date = DateTimeField(
         label=_('meeting date'),
-        widget=DateTimeInput(format=datetime_format),
-        input_formats=[datetime_format],
+        widget=DateTimeInput(format=DATETIME_FORMAT),
+        input_formats=[DATETIME_FORMAT],
         validators=[validate_future]
     )
     

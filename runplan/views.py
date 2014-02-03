@@ -13,13 +13,13 @@ from runplan.settings import *
 from runplan.utils import *
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def index(request):
-    all_runs = Run.objects.order_by('-meeting_date')[:index_limit]
+    all_runs = Run.objects.order_by('-meeting_date')[:INDEX_LIMIT]
     
-    threshold = timezone.now() + meettime_threshold
-    planned_runs = Run.objects.filter(meeting_date__gt=threshold).order_by('meeting_date')[:index_limit]
-    past_runs = Run.objects.filter(meeting_date__lt=threshold).order_by('-meeting_date')[:index_limit]
+    threshold = timezone.now() + MEETTIME_THRESHOLD
+    planned_runs = Run.objects.filter(meeting_date__gt=threshold).order_by('meeting_date')[:INDEX_LIMIT]
+    past_runs = Run.objects.filter(meeting_date__lt=threshold).order_by('-meeting_date')[:INDEX_LIMIT]
     
     if request.mobile:
         template = 'runplan/index-mobile.html'
@@ -33,9 +33,9 @@ def index(request):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def activity(request):
-    activities = Activity.objects.order_by('-create_date')[:index_limit]
+    activities = Activity.objects.order_by('-create_date')[:INDEX_LIMIT]
     
     if request.mobile:
         template = 'runplan/activity-mobile.html'
@@ -47,7 +47,7 @@ def activity(request):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def create(request):
     if request.method == 'POST':
         create_form = RunForm(request.POST)
@@ -79,7 +79,7 @@ def create(request):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def detail(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -128,7 +128,7 @@ def detail(request, runplan_id):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def edit(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -167,7 +167,7 @@ def edit(request, runplan_id):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def cancel(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -183,7 +183,7 @@ def cancel(request, runplan_id):
     return HttpResponseRedirect(reverse('runplan.views.index'))
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def recreate(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -223,7 +223,7 @@ def recreate(request, runplan_id):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def attend(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -257,7 +257,7 @@ def attend(request, runplan_id):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def revoke(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -275,7 +275,7 @@ def revoke(request, runplan_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def observe(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -287,7 +287,7 @@ def observe(request, runplan_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def forget(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -302,7 +302,7 @@ def forget(request, runplan_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def transport_offer(request, runplan_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -336,7 +336,7 @@ def transport_offer(request, runplan_id):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def transport_edit(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -373,7 +373,7 @@ def transport_edit(request, runplan_id, transport_id):
     })
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def transport_cancel(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -389,7 +389,7 @@ def transport_cancel(request, runplan_id, transport_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def transport_takeseat(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -409,7 +409,7 @@ def transport_takeseat(request, runplan_id, transport_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def transport_freeseat(request, runplan_id, transport_id):
     run = get_object_or_404(Run, pk=runplan_id)
     
@@ -429,7 +429,7 @@ def transport_freeseat(request, runplan_id, transport_id):
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
 @login_required
-@user_passes_test(is_runplan_user, login_url=noperm_target)
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def settings_edit(request):
     settings = finalize_account(request.user)
     

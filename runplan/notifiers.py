@@ -46,19 +46,19 @@ class Notification():
         for a in accounts:
             bcc_list.append(a.email)
         
-        subject = email_subject_prefix + email_subject_templates[self.code]
+        subject = EMAIL_SUBJECT_PREFIX + EMAIL_SUBJECT_TEMPLATES[self.code]
         subject = subject % {'user': self.request.user.get_full_name(), 'run': self.run.track_name}
         
-        if email_body_header:
-            message = email_body_header + '\n\n'
+        if EMAIL_BODY_HEADER:
+            message = EMAIL_BODY_HEADER + '\n\n'
         else:
             message = ''
         
-        message += email_body_templates[self.code]
+        message += EMAIL_BODY_TEMPLATES[self.code]
         message = message % {'link': self.request.build_absolute_uri(reverse('runplan.views.detail', args=(self.run.id,)))}
         
-        if email_body_footer:
-            message += '\n\n' + email_body_footer
+        if EMAIL_BODY_FOOTER:
+            message += '\n\n' + EMAIL_BODY_FOOTER
         
-        email = EmailMessage(subject, message, email_from_addr, bcc=bcc_list)
+        email = EmailMessage(subject, message, EMAIL_FROM_ADDR, bcc=bcc_list)
         email.send()

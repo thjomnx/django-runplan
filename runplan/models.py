@@ -29,13 +29,13 @@ class Run(models.Model):
         return self.transport_set.values_list('author', flat=True)
     
     def is_planned(self):
-        return self.meeting_date >= timezone.now() + meettime_threshold
+        return self.meeting_date >= timezone.now() + MEETTIME_THRESHOLD
     
     def is_past(self):
-        return self.meeting_date < timezone.now() + meettime_threshold
+        return self.meeting_date < timezone.now() + MEETTIME_THRESHOLD
     
     def __str__(self):
-        return "{0}: {1}".format(self.meeting_date.strftime(datetime_format), self.track_name)
+        return "{0}: {1}".format(self.meeting_date.strftime(DATETIME_FORMAT), self.track_name)
 
 @python_2_unicode_compatible
 class Activity(models.Model):
@@ -45,7 +45,7 @@ class Activity(models.Model):
     code = models.CharField(max_length=50)
     
     def __str__(self):
-        return "{0} on {1}".format(self.code, self.create_date.strftime(datetime_format))
+        return "{0} on {1}".format(self.code, self.create_date.strftime(DATETIME_FORMAT))
 
 @python_2_unicode_compatible
 class Comment(models.Model):
@@ -55,7 +55,7 @@ class Comment(models.Model):
     comment_text = models.TextField(_('comment text'))
     
     def __str__(self):
-        return "{0} on {1}".format(self.author.username, self.create_date.strftime(datetime_format))
+        return "{0} on {1}".format(self.author.username, self.create_date.strftime(DATETIME_FORMAT))
 
 @python_2_unicode_compatible
 class Attendance(models.Model):

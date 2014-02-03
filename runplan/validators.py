@@ -7,5 +7,5 @@ from django.utils.translation import ugettext_lazy as _
 from runplan.settings import *
 
 def validate_future(value):
-    if value <= timezone.now() - meettime_threshold:
+    if value <= timezone.now() - MEETTIME_THRESHOLD:
         raise ValidationError(_('The date must be in the future.'))
