@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django.forms import ModelForm, DateTimeField, DateTimeInput
+from django.forms import ModelForm, DateTimeField
 from django.utils.translation import ugettext_lazy as _
 
 from runplan.models import Run, Comment, Attendance, Transport, Settings
@@ -10,8 +10,6 @@ from runplan.validators import *
 class RunForm(ModelForm):
     meeting_date = DateTimeField(
         label=_('meeting date'),
-        widget=DateTimeInput(format=DATETIME_FORMAT),
-        input_formats=[DATETIME_FORMAT],
         validators=[validate_future]
     )
     

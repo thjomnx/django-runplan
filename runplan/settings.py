@@ -7,7 +7,6 @@ from django.utils.translation import ugettext as _
 AUTH_GROUP_NAME='runplan-users'
 NOPERM_TARGET='/accounts/noperm/'
 
-DATETIME_FORMAT='%d.%m.%Y %H:%M'
 MEETTIME_THRESHOLD=datetime.timedelta(minutes=15)
 INDEX_LIMIT=50
 
