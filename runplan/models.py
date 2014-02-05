@@ -110,7 +110,6 @@ class Booking(models.Model):
 class Settings(models.Model):
     account = models.ForeignKey(User)
     last_change = models.DateTimeField('last changed', auto_now=True)
-    emailon_activity = models.BooleanField(_('notify on all activity'), default=False)
     emailon_observation = models.BooleanField(_('notify only on observed runs'), default=True)
     emailon_newrun = models.BooleanField(_('notify on newly created run'), default=False)
     emailon_modifiedrun = models.BooleanField(_('notify when run has changed'), default=False)
