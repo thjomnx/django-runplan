@@ -41,8 +41,9 @@ class Notification():
         
         for s in Settings.objects.filter(**kwargs):
             if s.account not in accounts:
-                if s.emailon_observation == True and s.account in observers:
-                    accounts.append(s.account)
+                if s.emailon_observation == True:
+                    if s.account in observers:
+                        accounts.append(s.account)
                 else:
                     accounts.append(s.account)
         
