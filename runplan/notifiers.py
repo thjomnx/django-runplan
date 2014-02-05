@@ -9,16 +9,16 @@ from runplan.utils import *
 
 class Notification():
     email_query_mappings = {
-        'run.create': {'field': 'emailon_newrun', 'value': True},
-        'run.edit': {'field': 'emailon_modifiedrun', 'value': True},
-        'run.cancel': {'field': 'emailon_canceledrun', 'value': True},
-        'run.attend': {'field': 'emailon_runattend', 'value': True},
-        'run.revoke': {'field': 'emailon_runrevoke', 'value': True},
-        'run.transport.offer': {'field': 'emailon_transportoffer', 'value': True},
-        'run.transport.edit': {'field': 'emailon_transportedit', 'value': True},
-        'run.transport.cancel': {'field': 'emailon_transportcancel', 'value': True},
-        'run.transport.takeseat': {'field': 'emailon_transportseattaken', 'value': True},
-        'run.transport.freeseat': {'field': 'emailon_transportseatfreed', 'value': True},
+        'run.create': {'emailon_newrun': True},
+        'run.edit': {'emailon_modifiedrun': True},
+        'run.cancel': {'emailon_canceledrun': True},
+        'run.attend': {'emailon_runattend': True},
+        'run.revoke': {'emailon_runrevoke': True},
+        'run.transport.offer': {'emailon_transportoffer': True},
+        'run.transport.edit': {'emailon_transportedit': True},
+        'run.transport.cancel': {'emailon_transportcancel': True},
+        'run.transport.takeseat': {'emailon_transportseattaken': True},
+        'run.transport.freeseat': {'emailon_transportseatfreed': True},
     }
     
     def __init__(self, request, run, code):
@@ -30,22 +30,21 @@ class Notification():
         finalize_account(self.request.user)
         
         observers = []
-        accounts = []
         
         for o in self.run.observation_set.all():
-            if o.author not in accounts:
+            if o.author not in observers:
                 observers.append(o.author)
-                accounts.append(o.author)
         
-        kwargs = {}
+        accounts = []
         
-        for k, v in self.email_query_mappings.items():
-            if self.code == k:
-                kwargs[v['field']] = v['value']
-                
-                for s in Settings.objects.filter(**kwargs):
-                    if s.account not in accounts:
-                        accounts.append(s.account)
+        kwargs = self.email_query_mappings[self.code]
+        
+        for s in Settings.objects.filter(**kwargs):
+            if s.account not in accounts:
+                if s.emailon_observation == True and s.account in observers:
+                    accounts.append(s.account)
+                else:
+                    accounts.append(s.account)
         
         bcc_list = []
         
