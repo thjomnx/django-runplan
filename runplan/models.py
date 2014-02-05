@@ -111,9 +111,17 @@ class Settings(models.Model):
     account = models.ForeignKey(User)
     last_change = models.DateTimeField('last changed', auto_now=True)
     emailon_activity = models.BooleanField(_('notify on all activity'), default=False)
-    emailon_newrun = models.BooleanField(_('notify on newly created run'), default=True)
-    emailon_modifiedrun = models.BooleanField(_('notify on modified run'), default=True)
-    emailon_canceledrun = models.BooleanField(_('notify on canceled run'), default=True)
+    emailon_observation = models.BooleanField(_('notify only on observed runs'), default=True)
+    emailon_newrun = models.BooleanField(_('notify on newly created run'), default=False)
+    emailon_modifiedrun = models.BooleanField(_('notify when run has changed'), default=False)
+    emailon_canceledrun = models.BooleanField(_('notify on canceled run'), default=False)
+    emailon_runattend = models.BooleanField(_('notify when user attends run'), default=False)
+    emailon_runrevoke = models.BooleanField(_('notify when user revokes run attendance'), default=False)
+    emailon_transportoffer = models.BooleanField(_('notify on transport offers'), default=False)
+    emailon_transportedit = models.BooleanField(_('notify when transport offers change'), default=False)
+    emailon_transportcancel = models.BooleanField(_('notify on canceled transport offers'), default=False)
+    emailon_transportseattaken = models.BooleanField(_('notify when user has taken transport seat'), default=False)
+    emailon_transportseatfreed = models.BooleanField(_('notify when user has freed transport seat'), default=False)
     
     class Meta:
         verbose_name_plural = 'Settings'
