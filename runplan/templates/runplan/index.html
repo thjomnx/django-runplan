@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Overview' %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function activity() {
+        $.ajax({
+            url: '{% url 'runplan.views.activity' %}',
+            cache: false
+        }).done(function(data) {
+            var obj = $('#id_activity');
+
+            if (obj.html() != data) {
+                obj.hide().html(data).fadeIn('slow');
+            }
+        }).fail(function() {
+            var obj = $('#id_activity');
+            var error = '<span style="color: red;">Moar uurghh ... sorry!</span>';
+
+            if (obj.html() != error) {
+                obj.hide().html(error).fadeIn('slow');
+            }
+        });
+    }
+
+    $(function() {
+        activity();
+        setInterval('activity()', 15000);
+    });
+
+    $(function() {
+        $(document).tooltip();
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span8 offset1">
+        <a href="{% url 'runplan.views.create' %}" class="btn btn-info">{% trans 'Create new' %}</a>
+        <hr>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span4 offset1">
+        {% if all_runs|length > 0 %}
+            <h2>{% trans 'Planned runs' %}</h2>
+            {% for run in planned_runs %}
+                {% if forloop.first %}
+                    <p class="next">
+                {% else %}
+                    <p class="planned">
+                {% endif %}
+                    {% if run.canceled %}<strike>{% endif %}
+                    {% if forloop.first %}&#8680; <strong>{% endif %}
+                    <a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a> {{ t_on }} {{ run.meeting_date }}
+                    {% if user.id in run.attendee_ids %}+{% endif %}
+                    {% if user.id in run.observer_ids %}*{% endif %}
+                    {% if forloop.first %}</strong>{% endif %}
+                    {% if run.canceled %}</strike>{% endif %}
+                </p>
+            {% empty %}
+                <p class="planned">{% trans 'No runs are planned.' %}</p>
+            {% endfor %}
+
+            <h3 style="margin-top: 30px;">{% trans 'Past runs' %}</h3>
+            {% for run in past_runs %}
+                <p class="past compact">
+                    {% if run.canceled %}<strike>{% endif %}
+                    <a href="{% url 'runplan.views.detail' run.id %}">{{ run.track_name }}</a> {{ t_on }} {{ run.meeting_date }}
+                    {% if run.canceled %}</strike>{% endif %}
+                </p>
+            {% empty %}
+                <p class="past">{% trans 'No past runs yet.' %}</p>
+            {% endfor %}
+        {% else %}
+            <p>{% trans 'Neither past nor planned runs yet.' %}</p>
+        {% endif %}
+    </div>
+    <div class="span6">
+        <h3>{% trans 'Current activity' %}</h3>
+        <div id="id_activity"></div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base-mobile.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{{ t_my_settings }}
+{% endblock %}
+
+{% block header %}
+<h1>{{ t_my_settings }}</h1>
+<a data-rel="back" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Go back' %}</a>
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'runplan.views.settings_edit' %}" method="post">
+    {% csrf_token %}
+    {{ edit_form.as_p }}
+    <input type="submit" value="{% trans 'Submit changes' %}" data-icon="check" data-iconpos="left"/>
+</form>
+{% endblock %}

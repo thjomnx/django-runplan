@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{{ t_create_new_run }}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(function() {
+        $('input#id_meeting_date').datetimepicker({
+            minDate: today(),
+            hourMin: 6,
+            hourMax: 22,
+            stepMinute: 5,
+            dateFormat: 'dd.mm.yy',
+            timeFormat: 'HH:mm',
+            beforeShow: function() {
+                setTimeout(function() {
+                    $('.ui-datepicker').css('z-index', 9999999999);
+                }, 0);
+            }
+        });
+    });
+
+    {% if contact_phones|length > 0 %}
+        $(function() {
+            var contactPhones = [
+                {% for contact_phone in contact_phones %}"{{ contact_phone }}",{% endfor %}
+            ];
+
+            $('input#id_contact_phone').autocomplete({
+                source: contactPhones,
+                minLength: 0
+            })
+            .bind('focus', function() { $(this).autocomplete('search'); } );
+        });
+    {% endif %}
+
+    {% if starting_points|length > 0 %}
+        $(function() {
+            var startingPoints = [
+                {% for starting_point in starting_points %}"{{ starting_point }}",{% endfor %}
+            ];
+
+            $('input#id_starting_point').autocomplete({
+                source: startingPoints,
+                minLength: 0
+            })
+            .bind('focus', function() { $(this).autocomplete('search'); } );
+        });
+    {% endif %}
+
+    {% if track_names|length > 0 %}
+        $(function() {
+            var trackNames = [
+                {% for track_name in track_names %}"{{ track_name }}",{% endfor %}
+            ];
+
+            $('input#id_track_name').autocomplete({
+                source: trackNames,
+                minLength: 0
+            })
+            .bind('focus', function() { $(this).autocomplete('search'); } );
+        });
+    {% endif %}
+
+    $(function() {
+        var input = $('input#id_track_length');
+        var slider = $('<div id="slider_track_length"></div>').insertAfter(input).slider({
+            min: 0.1,
+            max: 42.0,
+            step: 0.1,
+            value: input.val(),
+            slide: function(event, ui) {
+                input.val(ui.value);
+            }
+        });
+
+        input.change(function() {
+            slider.slider('value', this.value);
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span8 offset1">
+        <a href="{% url 'runplan.views.index' %}" class="btn btn-danger">{% trans 'Cancel and back to list' %}</a>
+        <hr>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6 offset1">
+        <h2>{{ t_create_new_run }}</h2>
+        <form action="{% url 'runplan.views.create' %}" method="post">
+            {% csrf_token %}
+            <div>
+                <label for="{{ create_form.contact_phone.id_for_label }}">
+                    {{ create_form.contact_phone.label }}:
+                </label>
+                {{ create_form.contact_phone.errors }}
+                <input id="{{ create_form.contact_phone.id_for_label }}"
+                       name="{{ create_form.contact_phone.html_name }}"
+                       maxlength="{{ create_form.contact_phone.max_length }}"
+                       value="{{ create_form.instance.contact_phone }}"
+                       type="text">
+            </div>
+            <div>
+                <label for="{{ create_form.meeting_date.id_for_label }}">
+                    {{ create_form.meeting_date.label }}:
+                </label>
+                {{ create_form.meeting_date.errors }}
+                <input id="{{ create_form.meeting_date.id_for_label }}"
+                       name="{{ create_form.meeting_date.html_name }}"
+                       maxlength="{{ create_form.meeting_date.max_length }}"
+                       value="{{ create_form.instance.meeting_date|date:"d.m.Y H:i" }}"
+                       type="text">
+            </div>
+            <div>
+                <label for="{{ create_form.starting_point.id_for_label }}">
+                    {{ create_form.starting_point.label }}:
+                </label>
+                {{ create_form.starting_point.errors }}
+                <input id="{{ create_form.starting_point.id_for_label }}"
+                       name="{{ create_form.starting_point.html_name }}"
+                       maxlength="{{ create_form.starting_point.max_length }}"
+                       value="{{ create_form.instance.starting_point }}"
+                       type="text">
+            </div>
+            <div>
+                <label for="{{ create_form.track_name.id_for_label }}">
+                    {{ create_form.track_name.label }}:
+                </label>
+                {{ create_form.track_name.errors }}
+                <input id="{{ create_form.track_name.id_for_label }}"
+                       name="{{ create_form.track_name.html_name }}"
+                       maxlength="{{ create_form.track_name.max_length }}"
+                       value="{{ create_form.instance.track_name }}"
+                       type="text">
+            </div>
+            <div>
+                <label for="{{ create_form.track_length.id_for_label }}">
+                    {% trans 'track length [km]' %}:
+                </label>
+                {{ create_form.track_length.errors }}
+                <input id="{{ create_form.track_length.id_for_label }}"
+                       name="{{ create_form.track_length.html_name }}"
+                       value="{{ create_form.instance.track_length|stringformat:".1f" }}"
+                       type="number" min="0" max="42" step=".1">
+            </div>
+            <div style="margin-top: 10px;">
+                <label for="{{ create_form.details.id_for_label }}">
+                    {% trans 'details' %}:
+                </label>
+                {{ create_form.details.errors }}
+                {{ create_form.details }}
+            </div>
+            <input type="submit" value="{% trans 'Create' %}" class="btn btn-success"/>
+        </form>
+    </div>
+</div>
+{% endblock %}

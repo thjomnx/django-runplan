@@ -1,0 +1,204 @@
+{% extends "base-mobile.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{{ t_create_new_run }}
+{% endblock %}
+
+{% block header %}
+<h1>{{ t_create_new_run }}</h1>
+<a href="{% url 'runplan.views.index' %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Cancel' %}</a>
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'runplan.views.create' %}" method="post">
+    {% csrf_token %}
+    {{ create_form.non_field_errors }}
+    <div date-role="fieldcontain">
+        {{ create_form.contact_phone.errors }}
+        <input id="{{ create_form.contact_phone.id_for_label }}"
+               name="{{ create_form.contact_phone.html_name }}"
+               maxlength="{{ create_form.contact_phone.max_length }}"
+               placeholder="{{ create_form.contact_phone.label }}"
+               value="{{ create_form.instance.contact_phone }}"
+               type="text">
+    </div>
+
+    <div date-role="fieldcontain">
+        {{ create_form.meeting_date.errors }}
+        <input id="{{ create_form.meeting_date.id_for_label }}"
+               name="{{ create_form.meeting_date.html_name }}"
+               maxlength="{{ create_form.meeting_date.max_length }}"
+               placeholder="{{ create_form.meeting_date.label }}"
+               type="text">
+    </div>
+
+    <div date-role="fieldcontain">
+        {{ create_form.starting_point.errors }}
+        <input id="{{ create_form.starting_point.id_for_label }}"
+               name="{{ create_form.starting_point.html_name }}"
+               maxlength="{{ create_form.starting_point.max_length }}"
+               placeholder="{{ create_form.starting_point.label }}"
+               value="{{ create_form.instance.starting_point }}"
+               type="text">
+    </div>
+
+    <div date-role="fieldcontain">
+        {{ create_form.track_name.errors }}
+        <input id="{{ create_form.track_name.id_for_label }}"
+               name="{{ create_form.track_name.html_name }}"
+               maxlength="{{ create_form.track_name.max_length }}"
+               placeholder="{{ create_form.track_name.label }}"
+               value="{{ create_form.instance.track_name }}"
+               type="text">
+    </div>
+
+    <div date-role="fieldcontain">
+        {{ create_form.track_length.errors }}
+        <label for="{{ create_form.track_length.id_for_label }}">
+            {% trans 'track length [km]' %}:
+        </label>
+        <input id="{{ create_form.track_length.id_for_label }}"
+               name="{{ create_form.track_length.html_name }}"
+               type="range" min="0" max="42" step=".1"
+               value="{{ create_form.instance.track_length|stringformat:".1f" }}"
+               data-highlight="false">
+    </div>
+
+    <div date-role="fieldcontain">
+        {{ create_form.details.errors }}
+        <label for="{{ create_form.details.id_for_label }}">
+            {% trans 'details' %}:
+        </label>
+        {{ create_form.details }}
+    </div>
+    <input type="submit" value="{% trans 'Create' %}" data-icon="check" data-iconpos="left"/>
+</form>
+{% endblock %}
+
+{% block extras %}
+<div id="id_panel_contact_phone" data-role="panel" data-position="right" data-display="overlay">
+    {% for contact_phone in contact_phones %}
+        <input type="button" value="{{ contact_phone }}" class="contact_phone_option">
+    {% endfor %}
+</div>
+
+<div id="id_panel_meeting_date" data-role="panel" data-position="right" data-display="overlay" style="width: 350px !important;">
+    <input id="id_date_selector" name="date_selector" type="date"
+           data-role="datebox"
+           data-options='{"mode": "calbox",
+                       "useInline": true,
+                       "afterToday": true,
+                       "overrideDateFormat": "%d.%m.%Y"}'>
+
+    <input id="id_time_selector" name="time_selector" type="date"
+           data-role="datebox"
+           data-options='{"mode": "timebox",
+                       "useInline": true,
+                       "useSetButton": false,
+                       "useImmediate": true,
+                       "minuteStep": 5}'>
+</div>
+
+<div id="id_panel_starting_point" data-role="panel" data-position="right" data-display="overlay">
+    {% for starting_point in starting_points %}
+        <input type="button" value="{{ starting_point }}" class="starting_point_option">
+    {% endfor %}
+</div>
+
+<div id="id_panel_track_name" data-role="panel" data-position="right" data-display="overlay">
+    {% for track_name in track_names %}
+        <input type="button" value="{{ track_name }}" class="track_name_option">
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    {% if contact_phones|length > 0 %}
+    $(document).on('pageinit', function() {
+        $('#{{ create_form.contact_phone.id_for_label }}').click(function() {
+            $('#id_panel_contact_phone').panel('open');
+        })
+    });
+
+    $(document).on('pageinit', function() {
+        $('.contact_phone_option').click(function() {
+            $('#{{ create_form.contact_phone.id_for_label }}').val($(this).val());
+            $('#id_panel_contact_phone').panel('close');
+        })
+    });
+    {% endif %}
+
+    $(document).on('pageinit', function() {
+        $('#{{ create_form.meeting_date.id_for_label }}').click(function() {
+            $('#id_panel_meeting_date').panel('open');
+        })
+    });
+
+    $(document).on('pageinit', function() {
+        $('#id_date_selector').bind('change', function(e,p) {
+            var pattern = /\d{2}\.\d{2}\.\d{4}/g;
+            var curVal = $('#{{ create_form.meeting_date.id_for_label }}').val();
+            var newVal = $(this).val();
+
+            if (curVal.match(pattern) != null) {
+                var value = curVal.replace(pattern, newVal);
+            }
+            else {
+                var value = newVal + ' ' + curVal.trim();
+            }
+
+            $('#{{ create_form.meeting_date.id_for_label }}').val(value);
+        })
+    });
+
+    $(document).on('pageinit', function() {
+        $('#id_time_selector').bind('change', function(e,p) {
+            var pattern = /\d{2}:\d{2}/g;
+            var curVal = $('#{{ create_form.meeting_date.id_for_label }}').val();
+            var newVal = $(this).val();
+
+            if (curVal.match(pattern) != null) {
+                var value = curVal.replace(pattern, newVal);
+            }
+            else {
+                var value = curVal.trim() + ' ' + newVal;
+            }
+
+            $('#{{ create_form.meeting_date.id_for_label }}').val(value);
+        })
+    });
+
+    {% if starting_points|length > 0 %}
+    $(document).on('pageinit', function() {
+        $('#{{ create_form.starting_point.id_for_label }}').click(function() {
+            $('#id_panel_starting_point').panel('open');
+        })
+    });
+
+    $(document).on('pageinit', function() {
+        $('.starting_point_option').click(function() {
+            $('#{{ create_form.starting_point.id_for_label }}').val($(this).val());
+            $('#id_panel_starting_point').panel('close');
+        })
+    });
+    {% endif %}
+
+    {% if track_names|length > 0 %}
+    $(document).on('pageinit', function() {
+        $('#{{ create_form.track_name.id_for_label }}').click(function() {
+            $('#id_panel_track_name').panel('open');
+        })
+    });
+
+    $(document).on('pageinit', function() {
+        $('.track_name_option').click(function() {
+            $('#{{ create_form.track_name.id_for_label }}').val($(this).val());
+            $('#id_panel_track_name').panel('close');
+        })
+    });
+    {% endif %}
+</script>
+{% endblock %}

@@ -1,9 +1,0 @@
-{% for activity in activities %}
-    <p>
-        <a href="{% url 'runplan.views.detail' activity.run.id %}">
-            {{ activity.code }} by {{ activity.author.get_full_name }} on {{ activity.create_date }}
-        </a>
-    </p>
-{% empty %}
-    <p>Quiet out there ...</p>
-{% endfor %}

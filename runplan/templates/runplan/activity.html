@@ -1,0 +1,45 @@
+{% load url from future %}
+{% load i18n %}
+
+{% for activity in activities|slice:':15' %}
+    <p class="compact">
+        {% if forloop.first %}
+            <big>
+        {% else %}
+            <small>
+        {% endif %}
+
+        {{ activity.create_date }}: 
+        <a href="{% url 'runplan.views.detail' activity.run.id %}">            
+            {% if activity.code == 'run.create' %}
+                {{ activity.author.get_full_name }} hat neuen Lauf geplant
+            {% elif activity.code == 'run.edit' %}
+                {{ activity.author.get_full_name }} hat Laufdetails aktualisiert
+            {% elif activity.code == 'run.cancel' %}
+                {{ activity.author.get_full_name }} hat Lauf abgesagt
+            {% elif activity.code == 'run.attend' %}
+                {{ activity.author.get_full_name }} meldet Teilnahme an <strong>"{{ activity.run.track_name }}"</strong>
+            {% elif activity.code == 'run.revoke' %}
+                {{ activity.author.get_full_name }} hat Teilnahme an <strong>"{{ activity.run.track_name }}"</strong> zurückgezogen
+            {% elif activity.code == 'run.transport.offer' %}
+                {{ activity.author.get_full_name }} hat Mitfahrgelegenheit für <strong>"{{ activity.run.track_name }}"</strong> angeboten
+            {% elif activity.code == 'run.transport.edit' %}
+                {{ activity.author.get_full_name }} hat Mitfahrgelegenheit für <strong>"{{ activity.run.track_name }}"</strong> aktualisiert
+            {% elif activity.code == 'run.transport.cancel' %}
+                {{ activity.author.get_full_name }} hat Mitfahrgelegenheit für <strong>"{{ activity.run.track_name }}"</strong> zurückgezogen
+            {% elif activity.code == 'run.transport.takeseat' %}
+                {{ activity.author.get_full_name }} hat Platz in <strong>"{{ activity.run.track_name }}"</strong> gebucht
+            {% elif activity.code == 'run.transport.freeseat' %}
+                {{ activity.author.get_full_name }} hat Platz in <strong>"{{ activity.run.track_name }}"</strong> freigegeben
+            {% endif %}
+        </a>
+
+        {% if forloop.first %}
+            </big>
+        {% else %}
+            </small>
+        {% endif %}
+    </p>
+{% empty %}
+    <p>{% trans 'No activity yet.' %}</p>
+{% endfor %}

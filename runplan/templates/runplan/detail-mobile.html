@@ -1,0 +1,152 @@
+{% extends "base-mobile.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Details of' %} {{ run.track_name }} ({{ run.id }})
+{% endblock %}
+
+{% block header %}
+<h3>{{ run.track_name }} ({{ run.id }})</h3>
+<a href="{% url 'runplan.views.index' %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back to list' %}</a>
+{% endblock %}
+
+{% block content %}
+{% if run.is_planned and not run.canceled and run.author.id == user.id %}
+    <a href="{% url 'runplan.views.edit' run.id %}" data-role="button" data-icon="edit" data-iconpos="left" data-inline="true">{% trans 'Edit run' %}</a>
+    <a href="#id_conf_dialog" data-rel="popup" data-role="button" data-icon="delete" data-iconpos="left" data-inline="true">{% trans 'Cancel run' %}</a>
+{% endif %}
+
+<a href="{% url 'runplan.views.recreate' run.id %}" data-role="button" data-icon="refresh" data-iconpos="left" data-inline="true">{% trans 'Schedule again' %}</a>
+
+{% if run.is_planned and not run.canceled %}
+    {% if user_attendance %}
+        <a href="{% url 'runplan.views.revoke' run.id %}" data-role="button" data-icon="delete" data-iconpos="left" data-inline="true">{% trans 'Revoke' %}</a>
+    {% else  %}
+        <a href="{% url 'runplan.views.attend' run.id %}" data-role="button" data-icon="check" data-iconpos="left" data-inline="true">{% trans 'Attend' %}</a>
+    {% endif %}
+
+    {% if user_observation %}
+        <a href="{% url 'runplan.views.forget' run.id %}" data-role="button" data-icon="delete" data-iconpos="left" data-inline="true">{% trans 'Forget' %}</a>
+    {% else  %}
+        <a href="{% url 'runplan.views.observe' run.id %}" data-role="button" data-icon="eye" data-iconpos="left" data-inline="true">{% trans 'Observe' %}</a>
+    {% endif %}
+    
+    {% if user_transport %}
+        <a href="{% url 'runplan.views.transport_edit' run.id user_transport.id %}" data-role="button" data-icon="edit" data-iconpos="left" data-inline="true">{% trans 'Edit transport' %}</a>
+        <a href="{% url 'runplan.views.transport_cancel' run.id user_transport.id %}" data-role="button" data-icon="delete" data-iconpos="left" data-inline="true">{% trans 'Cancel transport' %}</a>
+    {% else  %}
+        <a href="{% url 'runplan.views.transport_offer' run.id %}" data-role="button" data-icon="plus" data-iconpos="left" data-inline="true">{% trans 'Offer transport' %}</a>
+    {% endif %}
+{% endif %}
+
+<h2>{{ run.track_name }}</h2>
+<ul>
+    <li>{% trans 'Created on:' %} <strong>{{ run.create_date }}</strong></li>
+    <li>{% trans 'Last update:' %} <strong>{{ run.last_change }}</strong></li>
+    <li>{% trans 'Created by:' %} <strong>{{ run.author.get_full_name|default:run.author.username }}</strong></li>
+    <li>{% trans 'Contact e-mail:' %} <strong>{{ run.author.email }}</strong></li>
+    <li>{% trans 'Contact phone:' %} <strong>{{ run.contact_phone|default:"--" }}</strong></li>
+    <li>{% trans 'Meeting date:' %} <strong>{{ run.meeting_date }}</strong></li>
+    <li>{% trans 'Starting point:' %} <strong>{{ run.starting_point }}</strong></li>
+    <li>{% trans 'Track length:' %} <strong>{{ run.track_length }} km</strong></li>
+</ul>
+
+<h5>{% trans 'Details' %}</h5>
+<p>{{ run.details }}</p>
+
+<h3>{% trans 'Attendees' %}</h3>
+{% if attendances %}
+    <ul>
+    {% for attendance in attendances %}
+        <li>
+            <strong>{{ attendance.author.get_full_name|default:attendance.author.username }}</strong>
+            <p>{{ attendance.remarks }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    {% if run.is_planned %}
+        <p>{% trans 'No attendances yet.' %}</p>
+    {% else %}
+        <p>{% trans 'Nobody was in.' %}</p>
+    {% endif %}
+{% endif %}
+
+<h3>{% trans 'Transport offers' %}</h3>
+
+{% if transports %}
+    <ul>
+    {% for transport in transports %}
+        <li>
+            <strong>{{ transport.author.get_full_name|default:transport.author.username }}</strong> {% trans 'offered on' %} {{ transport.create_date }}
+            <p>{{ transport.remarks }}</p>
+            <p>
+                {% trans 'Free seats:' %} {{ transport.remaining_seats }}/{{ transport.offered_seats }}
+                {% if run.is_planned and not run.canceled and transport.remaining_seats > 0 %}
+                    <a href="{% url 'runplan.views.transport_takeseat' run.id transport.id %}" data-role="button" data-icon="plus" data-iconpos="left" data-inline="true">{% trans 'Take seat' %}</a>
+                {% endif %}
+
+                {% if run.is_planned and not run.canceled and user.id in transport.booker_ids %}
+                    <a href="{% url 'runplan.views.transport_freeseat' run.id transport.id %}" data-role="button" data-icon="minus" data-iconpos="left" data-inline="true">{% trans 'Free seat' %}</a>
+                {% endif %}
+
+                {% if transport.booking_set.count > 0 %}
+                    <ul>
+                    {% for booker in transport.booking_set.all %}
+                        <li><strong>{{ booker.author.get_full_name|default:booker.author.username }}</strong> {% trans 'took seat on' %} {{ booker.create_date }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    {% if run.is_planned %}
+        <p>{% trans 'No transport offers yet.' %}</p>
+    {% else %}
+        <p>{% trans 'No transport offers were made.' %}</p>
+    {% endif %}
+{% endif %}
+
+<form action="{% url 'runplan.views.detail' run.id %}" method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" value="{% trans 'Comment' %}" data-icon="comment" data-iconpos="left"/>
+</form>
+
+{% if comments %}
+    <h3>{% trans 'Comments' %}</h3>
+    {% for comment in comments %}
+        <p>
+            {% if forloop.first %}
+                {% trans 'Latest:' %}
+            {% endif %}
+            <strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong> {% trans 'wrote on' %} {{ comment.create_date }}:
+        </p>
+        <p>{{ comment.comment_text }}</p>
+    {% endfor %}
+{% else %}
+    <p>{% trans 'No comments yet.' %}</p>
+{% endif %}
+{% endblock %}
+
+{% block extras %}
+<div id="id_conf_dialog" data-role="popup" class="ui-corner-all ui-popup ui-body-a ui-overlay-shadow" style="max-width:400px;">
+    <div data-role="header">
+        <h1 class="ui-title">{% trans 'Confirmation required' %}</h1>
+    </div>
+    <div role="main" class="ui-corner-bottom ui-content">
+        <h3 class="ui-title">{% trans 'Are you sure?' %}</h3>
+        <a href="#" data-role="button" data-inline="true" data-rel="back">{% trans 'Cancel' %}</a>
+        <a href="{% url 'runplan.views.cancel' run.id %}" data-role="button" data-inline="true" data-rel="back">{% trans 'Confirm' %}</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{{ t_offer_transport }} {{ run.track_name }} ({{ run.id }})
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(function() {
+        $('input#id_offered_seats').spinner({
+            min: 1,
+            max: 8
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span8 offset1">
+        <a href="{% url 'runplan.views.detail' run.id %}" class="btn btn-danger">{% trans 'Back to run' %}</a>
+        <hr>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span8 offset1">
+        <h3>{{ t_offer_transport_for }} "{{ run.track_name }}"</h3>
+        <form action="{% url 'runplan.views.transport_offer' run.id %}" method="post">
+            {% csrf_token %}
+            {{ transport_form.as_p }}
+            <input type="submit" value="{% trans 'Offer' %}" class="btn btn-success"/>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{{ t_my_settings }}
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span8 offset2">
+        <form action="{% url 'runplan.views.settings_edit' %}" method="post">
+            <fieldset class="inline">
+                {% csrf_token %}
+                <legend>{{ t_my_settings }}</legend>
+                {{ edit_form.as_p }}
+                <input type="submit" value="{% trans 'Submit changes' %}" class="btn"/>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock %}

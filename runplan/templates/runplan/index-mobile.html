@@ -1,0 +1,57 @@
+{% extends "base-mobile.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Planned runs' %}
+{% endblock %}
+
+{% block header %}
+<h1>{% trans 'Planned runs' %}</h1>
+<a href="{% url 'runplan.views.create' %}" data-icon="plus" data-iconpos="left" class="ui-btn-left">{% trans 'Create new' %}</a>
+
+<div data-role="navbar" data-iconpos="bottom">
+    <ul>
+        <li><a href="{% url 'runplan.views.index' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{% trans 'Planned runs' %}</a></li>
+        <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b">{% trans 'Current activity' %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+{% if all_runs|length > 0 %}
+    <ul data-role="listview" data-inset="false" data-filter="false">
+        <li data-role="list-divider" data-theme="d" role="heading">{% trans 'Planned runs' %}</li>
+        
+        {% for run in planned_runs %}
+            <li>
+                <a href="{% url 'runplan.views.detail' run.id %}">
+                    {% if run.canceled %}
+                        <strike>{{ run.track_name }}</strike>
+                    {% else %}
+                        {{ run.track_name }}
+                    {% endif %}
+                </a>
+            </li>
+        {% empty %}
+            <div style="text-align: center;">{% trans 'No runs are planned.' %}</div>
+        {% endfor %}
+        
+        <li data-role="list-divider" data-theme="d" role="heading">{% trans 'Past runs' %}</li>
+        
+        {% for run in past_runs %}
+            <li>
+                <a href="{% url 'runplan.views.detail' run.id %}">
+                    {% if run.canceled %}
+                        <strike>{{ run.track_name }}</strike>
+                    {% else %}
+                        {{ run.track_name }}
+                    {% endif %}
+                </a>
+            </li>
+        {% empty %}
+            {% trans 'No past runs yet.' %}
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

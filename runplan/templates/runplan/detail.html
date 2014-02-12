@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Details of' %} {{ run.track_name }} ({{ run.id }})
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(function() {
+        $('#id_conf_dialog').dialog({
+            autoOpen: false,
+            modal: true
+        });
+    });
+
+    $(function() {
+        $('.confirm').click(function(e) {
+            e.preventDefault();
+            var target = $(this).attr('href');
+
+            $('#id_conf_dialog').dialog({
+                buttons : {
+                    '{% trans 'Cancel' %}' : function() {
+                        $(this).dialog('close');
+                    },
+                    '{% trans 'Confirm' %}' : function() {
+                        window.location.href = target;
+                    }
+                }
+            });
+
+            $('#id_conf_dialog').dialog('open');
+        })
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="id_conf_dialog" title="{% trans 'Confirmation required' %}">
+    {% trans 'Are you sure?' %}
+</div>
+
+<div class="row-fluid">
+    <div class="span8 offset1">
+        <a href="{% url 'runplan.views.index' %}" class="btn btn-primary">{% trans 'Back to list' %}</a>
+
+        {% if run.is_planned and not run.canceled and run.author.id == user.id %}
+            <a href="{% url 'runplan.views.edit' run.id %}" class="btn">{% trans 'Edit run' %}</a>
+            <a href="{% url 'runplan.views.cancel' run.id %}" class="btn confirm">{% trans 'Cancel run' %}</a>
+        {% endif %}
+
+        <a href="{% url 'runplan.views.recreate' run.id %}" class="btn">{% trans 'Schedule again' %}</a>
+
+        <hr>
+    </div>
+    {% if run.is_planned and not run.canceled %}
+        <div class="span6 offset1">
+            {% if user_attendance %}
+                <a href="{% url 'runplan.views.revoke' run.id %}" class="btn">{% trans 'Revoke' %}</a>
+            {% else  %}
+                <a href="{% url 'runplan.views.attend' run.id %}" class="btn">{% trans 'Attend' %}</a>
+            {% endif %}
+
+            {% if user_observation %}
+                <a href="{% url 'runplan.views.forget' run.id %}" class="btn">{% trans 'Forget' %}</a>
+            {% else  %}
+                <a href="{% url 'runplan.views.observe' run.id %}" class="btn">{% trans 'Observe' %}</a>
+            {% endif %}
+
+            {% if user_transport %}
+                <a href="{% url 'runplan.views.transport_edit' run.id user_transport.id %}" class="btn">{% trans 'Edit transport' %}</a>
+                <a href="{% url 'runplan.views.transport_cancel' run.id user_transport.id %}" class="btn">{% trans 'Cancel transport' %}</a>
+            {% else  %}
+                <a href="{% url 'runplan.views.transport_offer' run.id %}" class="btn">{% trans 'Offer transport' %}</a>
+            {% endif %}
+
+            <hr>
+        </div>
+    {% endif %}
+</div>
+<div class="row-fluid">
+    <div class="span10 offset1">
+        <h2>{{ run.track_name }}</h2>
+
+        <div class="row-fluid">
+            <div class="span4">
+                <ul>
+                    {% if run.canceled %}
+                        <li class="canceled">{% trans 'Canceled' %}</li>
+                    {% endif %}
+
+                    <li>{% trans 'Meeting date' %}: <strong>{{ run.meeting_date }}</strong></li>
+                    <li>{% trans 'Starting point' %}: <strong>{{ run.starting_point }}</strong></li>
+                    <li>{% trans 'Track length' %}: <strong>{{ run.track_length }} km</strong></li>
+                    <li>{% trans 'Created by' %}: <strong>{{ run.author.get_full_name|default:run.author.username }}</strong></li>
+                    <li>{% trans 'Contact e-mail' %}: <strong>{{ run.author.email }}</strong></li>
+                    <li>{% trans 'Contact phone' %}: <strong>{{ run.contact_phone|default:"--" }}</strong></li>
+
+                    {% if run.is_planned and not run.canceled and user_observation %}
+                        <li class="observed">{% trans 'Observed' %}</li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="span4">
+                <h5>{% trans 'Details' %}:</h5>
+                <p>{{ run.details }}</p>
+                <p class="compact small">{% trans 'Created on' %}: {{ run.create_date }}</p>
+                <p class="compact small">{% trans 'Last update' %}: {{ run.last_change }}</p>
+            </div>
+        </div>
+
+        <h3>{% trans 'Attendees' %}</h3>
+
+        {% if attendances %}
+            <ul>
+            {% for attendance in attendances %}
+                <li>
+                    <strong>{{ attendance.author.get_full_name|default:attendance.author.username }}</strong>
+                    <p>{{ attendance.remarks }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            {% if run.is_planned %}
+                <p>{% trans 'No attendances yet.' %}</p>
+            {% else %}
+                <p>{% trans 'Nobody was in.' %}</p>
+            {% endif %}
+        {% endif %}
+
+        <h3>{% trans 'Transport offers' %}</h3>
+
+        {% if transports %}
+            <ul>
+            {% for transport in transports %}
+                <li>
+                    <strong>{{ transport.author.get_full_name|default:transport.author.username }}</strong>
+                     <span class="small">{% trans 'offered on' %} {{ transport.create_date }}</span>
+                    <p>{{ transport.remarks }}</p>
+                    <p>
+                        {% trans 'Free seats' %}: {{ transport.remaining_seats }}/{{ transport.offered_seats }}
+                        {% if run.is_planned and not run.canceled and transport.remaining_seats > 0 %}
+                            <a href="{% url 'runplan.views.transport_takeseat' run.id transport.id %}" class="btn" style="margin-left: 10px;">{% trans 'Take seat' %}</a>
+                        {% endif %}
+
+                        {% if run.is_planned and not run.canceled and user.id in transport.booker_ids %}
+                            <a href="{% url 'runplan.views.transport_freeseat' run.id transport.id %}" class="btn" style="margin-left: 10px;">{% trans 'Free seat' %}</a>
+                        {% endif %}
+
+                        {% if transport.booking_set.count > 0 %}
+                            <ul>
+                            {% for booker in transport.booking_set.all %}
+                                <li><strong>{{ booker.author.get_full_name|default:booker.author.username }}</strong> {% trans 'took seat on' %} {{ booker.create_date }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            {% if run.is_planned %}
+                <p>{% trans 'No transport offers yet.' %}</p>
+            {% else %}
+                <p>{% trans 'No transport offers were made.' %}</p>
+            {% endif %}
+        {% endif %}
+
+        <form action="{% url 'runplan.views.detail' run.id %}" method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <input type="submit" value="{% trans 'Comment' %}" class="btn btn-success"/>
+        </form>
+
+        {% if comments %}
+            <h3>{% trans 'Comments' %}</h3>
+            <div class="span4">
+            {% for comment in comments %}
+                <p>
+                    {% if forloop.first %}
+                        {% trans 'Latest' %}:
+                    {% endif %}
+                    <strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong>
+                     <span class="small">{% trans 'wrote on' %} {{ comment.create_date }}:</span>
+                </p>
+                <p>{{ comment.comment_text }}</p>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p>{% trans 'No comments yet.' %}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

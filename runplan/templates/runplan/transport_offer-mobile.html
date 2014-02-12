@@ -1,0 +1,20 @@
+{% extends "base-mobile.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{{ t_offer_transport }} {{ run.track_name }} ({{ run.id }})
+{% endblock %}
+
+{% block header %}
+<h1>{{ t_offer_transport }} {{ run.track_name }} ({{ run.id }})</h1>
+<a href="{% url 'runplan.views.detail' run.id %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back to run' %}</a>
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'runplan.views.transport_offer' run.id %}" method="post">
+    {% csrf_token %}
+    {{ transport_form.as_p }}
+    <input type="submit" value="{% trans 'Offer' %}" data-icon="check" data-iconpos="left"/>
+</form>
+{% endblock %}

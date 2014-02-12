@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{{ t_attend }} {{ run.track_name }} ({{ run.id }})
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span8 offset1">
+        <a href="{% url 'runplan.views.detail' run.id %}" class="btn btn-danger">{% trans 'Back to run' %}</a>
+        <hr>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6 offset1">
+        <h3>{{ t_attend_on }} "{{ run.track_name }}"</h3>
+        <form action="{% url 'runplan.views.attend' run.id %}" method="post">
+            {% csrf_token %}
+            {{ attend_form.as_p }}
+            <input type="submit" value="{{ t_attend }}" class="btn btn-success"/>
+        </form>
+    </div>
+</div>
+{% endblock %}
