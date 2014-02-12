@@ -10,7 +10,7 @@ NOPERM_TARGET='/accounts/noperm/'
 MEETTIME_THRESHOLD=datetime.timedelta(minutes=15)
 INDEX_LIMIT=50
 
-EMAIL_FROM_ADDR = 'infobot@thjom.de'
+EMAIL_FROM_ADDR = '<from address used for e-mail notification>'
 
 EMAIL_SUBJECT_PREFIX = _('[runplan] ')
 EMAIL_SUBJECT_TEMPLATES = {
@@ -26,7 +26,7 @@ EMAIL_SUBJECT_TEMPLATES = {
     'run.transport.freeseat': _('%(user)s freed seat on transport for run %(run)s'),
 }
 
-EMAIL_BODY_BACKLINK = 'http://bochumrun.hopto.org'
+EMAIL_BODY_BACKLINK = '<url used as link to site in e-mail body>'
 EMAIL_BODY_HEADER = ''
 EMAIL_BODY_FOOTER = _('This is an auto-generated e-mail - please do not respond!')
 EMAIL_BODY_TEMPLATES = {
