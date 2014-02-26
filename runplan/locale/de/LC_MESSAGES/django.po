@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-04 18:36+0100\n"
+"POT-Creation-Date: 2014-02-24 08:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,160 +12,409 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: runplan/forms.py:12 runplan/models.py:19
+#: forms.py:12 models.py:19
 msgid "meeting date"
 msgstr "Startzeit"
 
-#: runplan/models.py:17
+#: models.py:17
 msgid "canceled"
 msgstr "abgesagt"
 
-#: runplan/models.py:18
+#: models.py:18
 msgid "contact phone"
 msgstr "Rufnummer"
 
-#: runplan/models.py:20
+#: models.py:20
 msgid "starting point"
 msgstr "Treffpunkt"
 
-#: runplan/models.py:21
+#: models.py:21
 msgid "track name"
 msgstr "Strecke"
 
-#: runplan/models.py:22
+#: models.py:22 templates/runplan/create-mobile.html:60
+#: templates/runplan/create.html:146 templates/runplan/edit-mobile.html:57
+#: templates/runplan/edit.html:146
 msgid "track length [km]"
 msgstr "Streckenlänge [km]"
 
-#: runplan/models.py:23
+#: models.py:23 templates/runplan/create-mobile.html:72
+#: templates/runplan/create.html:156 templates/runplan/edit-mobile.html:68
+#: templates/runplan/edit.html:156
 msgid "details"
 msgstr "Details"
 
-#: runplan/models.py:58
+#: models.py:58
 msgid "comment text"
 msgstr "Kommentartext"
 
-#: runplan/models.py:68 runplan/models.py:89
+#: models.py:68 models.py:89
 msgid "remarks"
 msgstr "Bemerkungen"
 
-#: runplan/models.py:88
+#: models.py:88
 msgid "offered seats"
 msgstr "Angebotene Plätze"
 
-#: runplan/models.py:113
-msgid "notify on all activity"
-msgstr "Bei allen Ereignissen benachrichtigen"
-
-#: runplan/models.py:114
+#: models.py:113
 msgid "notify only on observed runs"
 msgstr "Nur bei beobachteten Läufen benachrichtigen"
 
-#: runplan/models.py:115
+#: models.py:114
 msgid "notify on newly created run"
 msgstr "Bei neuen Läufen benachrichtigen"
 
-#: runplan/models.py:116
+#: models.py:115
 msgid "notify when run has changed"
 msgstr "Bei Laufplanänderungen benachrichtigen"
 
-#: runplan/models.py:117
+#: models.py:116
 msgid "notify on canceled run"
 msgstr "Bei abgesagten Läufen benachrichtigen"
 
-#: runplan/models.py:118
+#: models.py:117
 msgid "notify when user attends run"
 msgstr "Bei neuen Teilnehmern benachrichtigen"
 
-#: runplan/models.py:119
+#: models.py:118
 msgid "notify when user revokes run attendance"
 msgstr "Benachrichtigen, wenn Teilnehmer absagt"
 
-#: runplan/models.py:120
+#: models.py:119
 msgid "notify on transport offers"
 msgstr "Bei neuen Mitfahrgelegenheiten benachrichtigen"
 
-#: runplan/models.py:121
+#: models.py:120
 msgid "notify when transport offers change"
 msgstr "Benachrichtigen, wenn Mitfahrgelegenheiten sich ändert"
 
-#: runplan/models.py:122
+#: models.py:121
 msgid "notify on canceled transport offers"
 msgstr "Benachrichtigen, wenn Mitfahrgelegenheit abgesagt wird"
 
-#: runplan/models.py:123
+#: models.py:122
 msgid "notify when user has taken transport seat"
 msgstr "Benachrichtigen, wenn Teilnehmer Platz belegt"
 
-#: runplan/models.py:124
+#: models.py:123
 msgid "notify when user has freed transport seat"
 msgstr "Benachrichtigen, wenn Teilnehmer Platz freigibt"
 
-#: runplan/settings.py:15
+#: settings.py:15
 msgid "[runplan] "
 msgstr "[runplan] "
 
-#: runplan/settings.py:17
+#: settings.py:17
 #, python-format
 msgid "%(user)s created new run %(run)s"
 msgstr "%(user)s hat %(run)s geplant"
 
-#: runplan/settings.py:18
+#: settings.py:18
 #, python-format
 msgid "%(user)s edited run %(run)s"
 msgstr "%(user)s hat %(run)s aktualisiert"
 
-#: runplan/settings.py:19
+#: settings.py:19
 #, python-format
 msgid "%(user)s canceled run %(run)s"
 msgstr "%(user)s hat %(run)s abgesagt"
 
-#: runplan/settings.py:20
+#: settings.py:20
 #, python-format
 msgid "%(user)s attends on run %(run)s"
 msgstr "%(user)s nimmt an %(run)s teil"
 
-#: runplan/settings.py:21
+#: settings.py:21
 #, python-format
 msgid "%(user)s revokes for run %(run)s"
 msgstr "%(user)s hat für %(run)s abgesagt"
 
-#: runplan/settings.py:22
+#: settings.py:22
 #, python-format
 msgid "%(user)s offered new transport for run %(run)s"
 msgstr "%(user)s hat für %(run)s Mitfahrgelegenheit angeboten"
 
-#: runplan/settings.py:23
+#: settings.py:23
 #, python-format
 msgid "%(user)s edited transport for run %(run)s"
 msgstr "%(user)s hat Mitfahrgelegenheit für %(run)s aktualisiert"
 
-#: runplan/settings.py:24
+#: settings.py:24
 #, python-format
 msgid "%(user)s canceled transport for run %(run)s"
 msgstr "%(user)s hat Mitfahrgelegenheit für %(run)s abgesagt"
 
-#: runplan/settings.py:25
+#: settings.py:25
 #, python-format
 msgid "%(user)s took seat on transport for run %(run)s"
 msgstr "%(user)s hat Platz in Mitfahrgelegenheit für %(run)s belegt"
 
-#: runplan/settings.py:26
+#: settings.py:26
 #, python-format
 msgid "%(user)s freed seat on transport for run %(run)s"
 msgstr "%(user)s hat Platz in Mitfahrgelegenheit für %(run)s freigegeben"
 
-#: runplan/settings.py:31
+#: settings.py:31
 msgid "This is an auto-generated e-mail - please do not respond!"
 msgstr "Dies ist eine automatisch generierte E-Mail - bitte nicht antworten!"
 
-#: runplan/settings.py:33 runplan/settings.py:34 runplan/settings.py:35
-#: runplan/settings.py:36 runplan/settings.py:37 runplan/settings.py:38
-#: runplan/settings.py:39 runplan/settings.py:40 runplan/settings.py:41
-#: runplan/settings.py:42
+#: settings.py:33 settings.py:34 settings.py:35 settings.py:36 settings.py:37
+#: settings.py:38 settings.py:39 settings.py:40 settings.py:41 settings.py:42
 #, python-format
 msgid "Link: %(link)s"
 msgstr "Link: %(link)s"
 
-#: runplan/validators.py:11
+#: validators.py:11
 msgid "The date must be in the future."
 msgstr "Das Datum muss in der Zukunft liegen."
+
+#: templates/runplan/activity-mobile.html:6
+#: templates/runplan/activity-mobile.html:10
+#: templates/runplan/activity-mobile.html:15
+#: templates/runplan/index-mobile.html:16 templates/runplan/index.html:82
+msgid "Current activity"
+msgstr "Letzte Aktivitäten (live)"
+
+#: templates/runplan/activity-mobile.html:14
+#: templates/runplan/index-mobile.html:6
+#: templates/runplan/index-mobile.html:10
+#: templates/runplan/index-mobile.html:15
+#: templates/runplan/index-mobile.html:24 templates/runplan/index.html:48
+msgid "Planned runs"
+msgstr "Geplante Läufe"
+
+#: templates/runplan/activity-mobile.html:49
+#: templates/runplan/activity.html:44
+msgid "No activity yet."
+msgstr "Noch keine Aktivitäten."
+
+#: templates/runplan/attend-mobile.html:11 templates/runplan/attend.html:12
+#: templates/runplan/edit-mobile.html:11 templates/runplan/edit.html:91
+#: templates/runplan/transport_edit-mobile.html:11
+#: templates/runplan/transport_edit.html:23
+#: templates/runplan/transport_offer-mobile.html:11
+#: templates/runplan/transport_offer.html:23
+msgid "Back to run"
+msgstr "Zurück zum Lauf"
+
+#: templates/runplan/create-mobile.html:11
+#: templates/runplan/detail-mobile.html:142 templates/runplan/detail.html:25
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: templates/runplan/create-mobile.html:76 templates/runplan/create.html:161
+msgid "Create"
+msgstr "Anlegen"
+
+#: templates/runplan/create.html:91
+msgid "Cancel and back to list"
+msgstr "Abbrechen und zurück zur Liste"
+
+#: templates/runplan/detail-mobile.html:6 templates/runplan/detail.html:6
+msgid "Details of"
+msgstr "Details zu"
+
+#: templates/runplan/detail-mobile.html:11 templates/runplan/detail.html:47
+msgid "Back to list"
+msgstr "Zurück zur Liste"
+
+#: templates/runplan/detail-mobile.html:16 templates/runplan/detail.html:50
+msgid "Edit run"
+msgstr "Zurück zur Liste"
+
+#: templates/runplan/detail-mobile.html:17 templates/runplan/detail.html:51
+msgid "Cancel run"
+msgstr "Lauf absagen"
+
+#: templates/runplan/detail-mobile.html:20 templates/runplan/detail.html:54
+msgid "Schedule again"
+msgstr "Erneut planen"
+
+#: templates/runplan/detail-mobile.html:24 templates/runplan/detail.html:61
+msgid "Revoke"
+msgstr "Absagen"
+
+#: templates/runplan/detail-mobile.html:26 templates/runplan/detail.html:63
+msgid "Attend"
+msgstr "Teilnehmen"
+
+#: templates/runplan/detail-mobile.html:30 templates/runplan/detail.html:67
+msgid "Forget"
+msgstr "Vergessen"
+
+#: templates/runplan/detail-mobile.html:32 templates/runplan/detail.html:69
+msgid "Observe"
+msgstr "Beobachten"
+
+#: templates/runplan/detail-mobile.html:36 templates/runplan/detail.html:73
+msgid "Edit transport"
+msgstr "Mitfahrgelegenheit ändern"
+
+#: templates/runplan/detail-mobile.html:37 templates/runplan/detail.html:74
+msgid "Cancel transport"
+msgstr "Mitfahrgelegenheit absagen"
+
+#: templates/runplan/detail-mobile.html:39 templates/runplan/detail.html:76
+msgid "Offer transport"
+msgstr "Mitfahrgelegenheit anbieten"
+
+#: templates/runplan/detail-mobile.html:45 templates/runplan/detail.html:109
+msgid "Created on"
+msgstr "Angelegt am"
+
+#: templates/runplan/detail-mobile.html:46 templates/runplan/detail.html:110
+msgid "Last update"
+msgstr "Letztes Update"
+
+#: templates/runplan/detail-mobile.html:47 templates/runplan/detail.html:97
+msgid "Created by"
+msgstr "Angelegt von"
+
+#: templates/runplan/detail-mobile.html:48 templates/runplan/detail.html:98
+msgid "Contact e-mail"
+msgstr "E-Mail"
+
+#: templates/runplan/detail-mobile.html:49 templates/runplan/detail.html:99
+msgid "Contact phone"
+msgstr "Rufnummer"
+
+#: templates/runplan/detail-mobile.html:50 templates/runplan/detail.html:94
+msgid "Meeting date"
+msgstr "Startzeit"
+
+#: templates/runplan/detail-mobile.html:51 templates/runplan/detail.html:95
+msgid "Starting point"
+msgstr "Treffpunkt"
+
+#: templates/runplan/detail-mobile.html:52 templates/runplan/detail.html:96
+msgid "Track length"
+msgstr "Streckenlänge [km]"
+
+#: templates/runplan/detail-mobile.html:55 templates/runplan/detail.html:107
+msgid "Details"
+msgstr "Details"
+
+#: templates/runplan/detail-mobile.html:58 templates/runplan/detail.html:114
+msgid "Attendees"
+msgstr "Teilnehmer"
+
+#: templates/runplan/detail-mobile.html:70 templates/runplan/detail.html:127
+msgid "No attendances yet."
+msgstr "Noch keine Teilnehmer."
+
+#: templates/runplan/detail-mobile.html:72 templates/runplan/detail.html:129
+msgid "Nobody was in."
+msgstr "Niemand hat teilgenommen."
+
+#: templates/runplan/detail-mobile.html:76 templates/runplan/detail.html:133
+msgid "Transport offers"
+msgstr "Mitfahrgelegenheiten"
+
+#: templates/runplan/detail-mobile.html:82 templates/runplan/detail.html:140
+msgid "offered on"
+msgstr "hat angeboten am"
+
+#: templates/runplan/detail-mobile.html:85 templates/runplan/detail.html:143
+msgid "Free seats"
+msgstr "Freie Sitzplätze"
+
+#: templates/runplan/detail-mobile.html:87 templates/runplan/detail.html:145
+msgid "Take seat"
+msgstr "Platz belegen"
+
+#: templates/runplan/detail-mobile.html:91 templates/runplan/detail.html:149
+msgid "Free seat"
+msgstr "Platz freigeben"
+
+#: templates/runplan/detail-mobile.html:97 templates/runplan/detail.html:155
+msgid "took seat on"
+msgstr "belegte Platz am"
+
+#: templates/runplan/detail-mobile.html:107 templates/runplan/detail.html:165
+msgid "No transport offers yet."
+msgstr "Noch keine Mitfahrgelegenheiten."
+
+#: templates/runplan/detail-mobile.html:109 templates/runplan/detail.html:167
+msgid "No transport offers were made."
+msgstr "Es wurden noch keine Mitfahrgelegenheiten angeboten."
+
+#: templates/runplan/detail-mobile.html:116 templates/runplan/detail.html:174
+msgid "Comment"
+msgstr "Kommentieren"
+
+#: templates/runplan/detail-mobile.html:120 templates/runplan/detail.html:178
+msgid "Comments"
+msgstr "Kommentare"
+
+#: templates/runplan/detail-mobile.html:124 templates/runplan/detail.html:183
+msgid "Latest"
+msgstr "Letzter Kommentar"
+
+#: templates/runplan/detail-mobile.html:126 templates/runplan/detail.html:186
+msgid "wrote on"
+msgstr "schrieb am"
+
+#: templates/runplan/detail-mobile.html:131 templates/runplan/detail.html:192
+msgid "No comments yet."
+msgstr "Noch keine Kommentare."
+
+#: templates/runplan/detail-mobile.html:138 templates/runplan/detail.html:41
+msgid "Confirmation required"
+msgstr "Bestätigung erforderlich"
+
+#: templates/runplan/detail-mobile.html:141 templates/runplan/detail.html:42
+msgid "Are you sure?"
+msgstr "Sind Sie sicher?"
+
+#: templates/runplan/detail-mobile.html:143 templates/runplan/detail.html:28
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#: templates/runplan/detail.html:91
+msgid "Canceled"
+msgstr "abgesagt"
+
+#: templates/runplan/detail.html:102
+msgid "Observed"
+msgstr "Wird beobachtet"
+
+#: templates/runplan/edit-mobile.html:72 templates/runplan/edit.html:161
+#: templates/runplan/settings_edit-mobile.html:18
+#: templates/runplan/settings_edit.html:17
+#: templates/runplan/transport_edit-mobile.html:18
+#: templates/runplan/transport_edit.html:33
+msgid "Submit changes"
+msgstr "Speichern"
+
+#: templates/runplan/index-mobile.html:11 templates/runplan/index.html:41
+msgid "Create new"
+msgstr "Neu planen"
+
+#: templates/runplan/index-mobile.html:37 templates/runplan/index.html:64
+msgid "No runs are planned."
+msgstr "Kein Lauf geplant."
+
+#: templates/runplan/index-mobile.html:40 templates/runplan/index.html:67
+msgid "Past runs"
+msgstr "Bisherige Läufe"
+
+#: templates/runplan/index-mobile.html:53 templates/runplan/index.html:75
+msgid "No past runs yet."
+msgstr "Noch keine bisherigen Läufe vorhanden."
+
+#: templates/runplan/index.html:6
+msgid "Overview"
+msgstr "Übersicht"
+
+#: templates/runplan/index.html:78
+msgid "Neither past nor planned runs yet."
+msgstr "Keine Läufe vorhanden."
+
+#: templates/runplan/settings_edit-mobile.html:11
+msgid "Go back"
+msgstr "Zurück"
+
+#: templates/runplan/transport_offer-mobile.html:18
+#: templates/runplan/transport_offer.html:33
+msgid "Offer"
+msgstr "Anbieten"

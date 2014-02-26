@@ -42,14 +42,14 @@
 
 <h2>{{ run.track_name }}</h2>
 <ul>
-    <li>{% trans 'Created on:' %} <strong>{{ run.create_date }}</strong></li>
-    <li>{% trans 'Last update:' %} <strong>{{ run.last_change }}</strong></li>
-    <li>{% trans 'Created by:' %} <strong>{{ run.author.get_full_name|default:run.author.username }}</strong></li>
-    <li>{% trans 'Contact e-mail:' %} <strong>{{ run.author.email }}</strong></li>
-    <li>{% trans 'Contact phone:' %} <strong>{{ run.contact_phone|default:"--" }}</strong></li>
-    <li>{% trans 'Meeting date:' %} <strong>{{ run.meeting_date }}</strong></li>
-    <li>{% trans 'Starting point:' %} <strong>{{ run.starting_point }}</strong></li>
-    <li>{% trans 'Track length:' %} <strong>{{ run.track_length }} km</strong></li>
+    <li>{% trans 'Created on' %}: <strong>{{ run.create_date }}</strong></li>
+    <li>{% trans 'Last update' %}: <strong>{{ run.last_change }}</strong></li>
+    <li>{% trans 'Meeting date' %}: <strong>{{ run.meeting_date }}</strong></li>
+    <li>{% trans 'Starting point' %}: <strong>{{ run.starting_point }}</strong></li>
+    <li>{% trans 'Track length' %}: <strong>{{ run.track_length }} km</strong></li>
+    <li>{% trans 'Created by' %}: <strong>{{ run.author.get_full_name|default:run.author.username }}</strong></li>
+    <li>{% trans 'Contact e-mail' %}: <strong>{{ run.author.email }}</strong></li>
+    <li>{% trans 'Contact phone' %}: <strong>{{ run.contact_phone|default:"--" }}</strong></li>
 </ul>
 
 <h5>{% trans 'Details' %}</h5>
@@ -82,7 +82,7 @@
             <strong>{{ transport.author.get_full_name|default:transport.author.username }}</strong> {% trans 'offered on' %} {{ transport.create_date }}
             <p>{{ transport.remarks }}</p>
             <p>
-                {% trans 'Free seats:' %} {{ transport.remaining_seats }}/{{ transport.offered_seats }}
+                {% trans 'Free seats' %}: {{ transport.remaining_seats }}/{{ transport.offered_seats }}
                 {% if run.is_planned and not run.canceled and transport.remaining_seats > 0 %}
                     <a href="{% url 'runplan.views.transport_takeseat' run.id transport.id %}" data-role="button" data-icon="plus" data-iconpos="left" data-inline="true">{% trans 'Take seat' %}</a>
                 {% endif %}
@@ -121,7 +121,7 @@
     {% for comment in comments %}
         <p>
             {% if forloop.first %}
-                {% trans 'Latest:' %}
+                {% trans 'Latest' %}:
             {% endif %}
             <strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong> {% trans 'wrote on' %} {{ comment.create_date }}:
         </p>
