@@ -288,7 +288,7 @@ msgstr "Treffpunkt"
 
 #: templates/runplan/detail-mobile.html:52 templates/runplan/detail.html:96
 msgid "Track length"
-msgstr "Streckenlänge [km]"
+msgstr "Streckenlänge"
 
 #: templates/runplan/detail-mobile.html:55 templates/runplan/detail.html:107
 msgid "Details"

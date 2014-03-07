@@ -21,7 +21,9 @@
 {% block content %}
 {% if all_runs|length > 0 %}
     <ul data-role="listview" data-inset="false" data-filter="false">
-        <li data-role="list-divider" data-theme="d" role="heading">{% trans 'Planned runs' %}</li>
+        <li data-role="list-divider" data-theme="d" role="heading" class="section">
+            {% trans 'Planned runs' %}
+        </li>
         
         {% for run in planned_runs %}
             <li>
@@ -37,7 +39,9 @@
             <div style="text-align: center;">{% trans 'No runs are planned.' %}</div>
         {% endfor %}
         
-        <li data-role="list-divider" data-theme="d" role="heading">{% trans 'Past runs' %}</li>
+        <li data-role="list-divider" data-theme="d" role="heading" class="section">
+            {% trans 'Past runs' %}
+        </li>
         
         {% for run in past_runs %}
             <li>
