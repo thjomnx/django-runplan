@@ -29,23 +29,27 @@ class Notification():
     def send(self):
         finalize_account(self.request.user)
         
-        observers = []
-        
-        for o in self.run.observation_set.all():
-            if o.author not in observers:
-                observers.append(o.author)
-        
         accounts = []
-        
         kwargs = self.email_query_mappings[self.code]
         
-        for s in Settings.objects.filter(**kwargs):
-            if s.account not in accounts:
-                if s.emailon_observation == True:
-                    if s.account in observers:
-                        accounts.append(s.account)
-                else:
+        if self.code == 'run.create':
+            for s in Settings.objects.filter(**kwargs):
+                if s.account not in accounts:
                     accounts.append(s.account)
+        else:
+            observers = []
+            
+            for o in self.run.observation_set.all():
+                if o.author not in observers:
+                    observers.append(o.author)
+            
+            for s in Settings.objects.filter(**kwargs):
+                if s.account not in accounts:
+                    if s.emailon_observation == True:
+                        if s.account in observers:
+                            accounts.append(s.account)
+                    else:
+                        accounts.append(s.account)
         
         bcc_list = []
         
