@@ -3,18 +3,128 @@
 {% load i18n %}
 
 {% block title %}
-{{ t_my_settings }}
+{{ t_settings }}
 {% endblock %}
 
 {% block header %}
-<h1>{{ t_my_settings }}</h1>
-<a data-rel="back" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Go back' %}</a>
+<h1>{{ t_settings }}</h1>
+<a data-rel="back" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back' %}</a>
 {% endblock %}
 
 {% block content %}
 <form action="{% url 'runplan.views.settings_edit' %}" method="post">
     {% csrf_token %}
-    {{ edit_form.as_p }}
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_observation.id_for_label }}">
+            {% trans 'notify only on observed runs' %}
+        </label>
+        <input id="{{ edit_form.emailon_observation.id_for_label }}"
+               name="{{ edit_form.emailon_observation.html_name }}"
+               {% if edit_form.emailon_observation.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_newrun.id_for_label }}">
+            {% trans 'notify on newly created run' %}
+        </label>
+        <input id="{{ edit_form.emailon_newrun.id_for_label }}"
+               name="{{ edit_form.emailon_newrun.html_name }}"
+               {% if edit_form.emailon_newrun.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_modifiedrun.id_for_label }}">
+            {% trans 'notify when run has changed' %}
+        </label>
+        <input id="{{ edit_form.emailon_modifiedrun.id_for_label }}"
+               name="{{ edit_form.emailon_modifiedrun.html_name }}"
+               {% if edit_form.emailon_modifiedrun.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_canceledrun.id_for_label }}">
+            {% trans 'notify on canceled run' %}
+        </label>
+        <input id="{{ edit_form.emailon_canceledrun.id_for_label }}"
+               name="{{ edit_form.emailon_canceledrun.html_name }}"
+               {% if edit_form.emailon_canceledrun.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_runattend.id_for_label }}">
+            {% trans 'notify when user attends run' %}
+        </label>
+        <input id="{{ edit_form.emailon_runattend.id_for_label }}"
+               name="{{ edit_form.emailon_runattend.html_name }}"
+               {% if edit_form.emailon_runattend.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_runrevoke.id_for_label }}">
+            {% trans 'notify when user revokes run attendance' %}
+        </label>
+        <input id="{{ edit_form.emailon_runrevoke.id_for_label }}"
+               name="{{ edit_form.emailon_runrevoke.html_name }}"
+               {% if edit_form.emailon_runrevoke.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_transportoffer.id_for_label }}">
+            {% trans 'notify on transport offers' %}
+        </label>
+        <input id="{{ edit_form.emailon_transportoffer.id_for_label }}"
+               name="{{ edit_form.emailon_transportoffer.html_name }}"
+               {% if edit_form.emailon_transportoffer.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_transportedit.id_for_label }}">
+            {% trans 'notify when transport offers change' %}
+        </label>
+        <input id="{{ edit_form.emailon_transportedit.id_for_label }}"
+               name="{{ edit_form.emailon_transportedit.html_name }}"
+               {% if edit_form.emailon_transportedit.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_transportcancel.id_for_label }}">
+            {% trans 'notify on canceled transport offers' %}
+        </label>
+        <input id="{{ edit_form.emailon_transportcancel.id_for_label }}"
+               name="{{ edit_form.emailon_transportcancel.html_name }}"
+               {% if edit_form.emailon_transportcancel.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_transportseattaken.id_for_label }}">
+            {% trans 'notify when user has taken transport seat' %}
+        </label>
+        <input id="{{ edit_form.emailon_transportseattaken.id_for_label }}"
+               name="{{ edit_form.emailon_transportseattaken.html_name }}"
+               {% if edit_form.emailon_transportseattaken.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="{{ edit_form.emailon_transportseatfreed.id_for_label }}">
+            {% trans 'notify when user has freed transport seat' %}
+        </label>
+        <input id="{{ edit_form.emailon_transportseatfreed.id_for_label }}"
+               name="{{ edit_form.emailon_transportseatfreed.html_name }}"
+               {% if edit_form.emailon_transportseatfreed.value %}checked="checked"{% endif %}
+               type="checkbox"/>
+    </div>
+
     <input type="submit" value="{% trans 'Submit changes' %}" data-icon="check" data-iconpos="left"/>
 </form>
 {% endblock %}

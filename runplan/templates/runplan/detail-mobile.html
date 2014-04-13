@@ -3,12 +3,12 @@
 {% load i18n %}
 
 {% block title %}
-{% trans 'Details of' %} {{ run.track_name }} ({{ run.id }})
+{% trans 'Details' %}
 {% endblock %}
 
 {% block header %}
-<h3>{{ run.track_name }} ({{ run.id }})</h3>
-<a href="{% url 'runplan.views.index' %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back to list' %}</a>
+<h3>{% trans 'Details' %}</h3>
+<a href="{% url 'runplan.views.index' %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back' %}</a>
 {% endblock %}
 
 {% block content %}
@@ -56,6 +56,10 @@
     <li>{% trans 'Created by' %}: <strong>{{ run.author.get_full_name|default:run.author.username }}</strong></li>
     <li>{% trans 'Contact e-mail' %}: <strong>{{ run.author.email }}</strong></li>
     <li>{% trans 'Contact phone' %}: <strong>{{ run.contact_phone|default:"--" }}</strong></li>
+
+    {% if run.is_planned and not run.canceled and user_observation %}
+        <li class="observed">{% trans 'Observed' %}</li>
+    {% endif %}
 </ul>
 
 <p>{{ run.details }}</p>
@@ -67,7 +71,7 @@
     <ul>
     {% for attendance in attendances %}
         <li>
-            <strong>{{ attendance.author.get_full_name|default:attendance.author.username }}</strong> {{ attendance.remarks }}
+            <strong>{{ attendance.author.get_full_name|default:attendance.author.username }}</strong> <span class="compact small">{{ attendance.remarks }}</span>
         </li>
     {% endfor %}
     </ul>
@@ -127,10 +131,7 @@
 {% if comments %}
     <h3>{% trans 'Comments' %}</h3>
     {% for comment in comments %}
-        <p>
-            {% if forloop.first %}
-                {% trans 'Latest' %}:
-            {% endif %}
+        <p class="compact small">
             <strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong> {% trans 'wrote on' %} {{ comment.create_date }}:
         </p>
         <p>{{ comment.comment_text }}</p>
@@ -148,7 +149,7 @@
     <div role="main" class="ui-corner-bottom ui-content">
         <h3 class="ui-title">{% trans 'Are you sure?' %}</h3>
         <a href="#" data-role="button" data-inline="true" data-rel="back">{% trans 'Cancel' %}</a>
-        <a href="{% url 'runplan.views.cancel' run.id %}" data-role="button" data-inline="true" data-rel="back">{% trans 'Confirm' %}</a>
+        <a href="{% url 'runplan.views.cancel' run.id %}" data-role="button" data-inline="true">{% trans 'Confirm' %}</a>
     </div>
 </div>
 {% endblock %}

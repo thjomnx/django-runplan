@@ -3,17 +3,17 @@
 {% load i18n %}
 
 {% block title %}
-{% trans 'Planned runs' %}
+{% trans 'Planned' %}
 {% endblock %}
 
 {% block header %}
-<h1>{% trans 'Planned runs' %}</h1>
-<a href="{% url 'runplan.views.create' %}" data-icon="plus" data-iconpos="left" class="ui-btn-left">{% trans 'Create new' %}</a>
+<h1>{% trans 'Planned' %}</h1>
+<a href="{% url 'runplan.views.create' %}" data-icon="plus" data-iconpos="left" class="ui-btn-left">{% trans 'New' %}</a>
 
 <div data-role="navbar" data-iconpos="bottom">
     <ul>
-        <li><a href="{% url 'runplan.views.index' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{% trans 'Planned runs' %}</a></li>
-        <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b">{% trans 'Current activity' %}</a></li>
+        <li><a href="{% url 'runplan.views.index' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{% trans 'Planned' %}</a></li>
+        <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b">{% trans 'Activity' %}</a></li>
     </ul>
 </div>
 {% endblock %}
@@ -22,7 +22,7 @@
 {% if all_runs|length > 0 %}
     <ul data-role="listview" data-inset="false" data-filter="false">
         <li data-role="list-divider" data-theme="d" role="heading" class="section">
-            {% trans 'Planned runs' %}
+            {% trans 'Planned' %}
         </li>
         
         {% for run in planned_runs %}
@@ -40,7 +40,7 @@
         {% endfor %}
         
         <li data-role="list-divider" data-theme="d" role="heading" class="section">
-            {% trans 'Past runs' %}
+            {% trans 'Past' %}
         </li>
         
         {% for run in past_runs %}

@@ -3,16 +3,16 @@
 {% load i18n %}
 
 {% block title %}
-{% trans 'Current activity' %}
+{% trans 'Activity' %}
 {% endblock %}
 
 {% block header %}
-<h1>{% trans 'Current activity' %}</h1>
+<h1>{% trans 'Activity' %}</h1>
 
 <div data-role="navbar" data-iconpos="bottom">
     <ul>
-        <li><a href="{% url 'runplan.views.index' %}" data-transition="fade" data-theme="b">{% trans 'Planned runs' %}</a></li>
-        <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{% trans 'Current activity' %}</a></li>
+        <li><a href="{% url 'runplan.views.index' %}" data-transition="fade" data-theme="b">{% trans 'Planned' %}</a></li>
+        <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{% trans 'Activity' %}</a></li>
     </ul>
 </div>
 {% endblock %}

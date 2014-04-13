@@ -230,6 +230,11 @@ def attend(request, runplan_id):
     if run.canceled:
         return HttpResponseForbidden()
     
+    attendances = run.attendance_set.filter(author=request.user)
+    
+    if len(attendances) > 0:
+        return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+    
     if request.method == 'POST':
         attend_form = AttendanceForm(request.POST)
         
@@ -282,7 +287,10 @@ def observe(request, runplan_id):
     if run.canceled:
         return HttpResponseForbidden()
     
-    Observation(run=run, author=request.user).save()
+    observations = run.observation_set.filter(author=request.user)
+    
+    if len(observations) < 1:
+        Observation(run=run, author=request.user).save()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
 
@@ -308,6 +316,11 @@ def transport_offer(request, runplan_id):
     
     if run.canceled:
         return HttpResponseForbidden()
+    
+    transports = run.transport_set.filter(author=request.user)
+    
+    if len(transports) > 0:
+        return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
     
     if request.method == 'POST':
         transport_form = TransportForm(request.POST)

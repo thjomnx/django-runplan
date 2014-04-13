@@ -3,12 +3,12 @@
 {% load i18n %}
 
 {% block title %}
-{{ t_attend }} {{ run.track_name }} ({{ run.id }})
+{{ t_attend }}
 {% endblock %}
 
 {% block header %}
-<h1>{{ t_attend }} {{ run.track_name }} ({{ run.id }})</h1>
-<a href="{% url 'runplan.views.detail' run.id %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back to run' %}</a>
+<h1>{{ t_attend }}</h1>
+<a href="{% url 'runplan.views.detail' run.id %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back' %}</a>
 {% endblock %}
 
 {% block content %}

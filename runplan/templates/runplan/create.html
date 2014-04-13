@@ -105,7 +105,7 @@
                 <input id="{{ create_form.contact_phone.id_for_label }}"
                        name="{{ create_form.contact_phone.html_name }}"
                        maxlength="{{ create_form.contact_phone.max_length }}"
-                       value="{{ create_form.instance.contact_phone }}"
+                       value="{{ create_form.instance.contact_phone|default:"" }}"
                        type="text">
             </div>
             <div>

@@ -3,12 +3,12 @@
 {% load i18n %}
 
 {% block title %}
-{{ t_edit_run }} {{ run.track_name }} ({{ run.id }})
+{{ t_edit_run }}
 {% endblock %}
 
 {% block header %}
-<h1>{{ t_edit_run }} {{ run.track_name }} ({{ run.id }})</h1>
-<a href="{% url 'runplan.views.detail' run.id %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back to run' %}</a>
+<h1>{{ t_edit_run }}</h1>
+<a href="{% url 'runplan.views.detail' run.id %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back' %}</a>
 {% endblock %}
 
 {% block content %}
@@ -32,6 +32,23 @@
                placeholder="{{ edit_form.meeting_date.label }}"
                value="{{ edit_form.instance.meeting_date|date:"d.m.Y H:i" }}"
                type="text">
+
+        <input id="id_date_selector" name="date_selector" type="date"
+               data-role="datebox"
+               data-options='{"mode": "calbox",
+                           "useInline": true,
+                           "afterToday": true,
+                           "overrideDateFormat": "%d.%m.%Y",
+                           "defaultValue": [{{ edit_form.instance.meeting_date|date:"Y,n,j" }}]}'>
+
+        <input id="id_time_selector" name="time_selector" type="date"
+               data-role="datebox"
+               data-options='{"mode": "timebox",
+                           "useInline": true,
+                           "useSetButton": false,
+                           "useImmediate": true,
+                           "minuteStep": 5,
+                           "defaultValue": "{{ edit_form.instance.meeting_date|date:"H:i" }}"}'>
     </div>
     <div date-role="fieldcontain">
         {{ edit_form.starting_point.errors }}
@@ -73,68 +90,9 @@
 </form>
 {% endblock %}
 
-{% block extras %}
-<div id="id_panel_contact_phone" data-role="panel" data-position="right" data-display="overlay">
-    {% for contact_phone in contact_phones %}
-        <input type="button" value="{{ contact_phone }}" class="contact_phone_option">
-    {% endfor %}
-</div>
-
-<div id="id_panel_meeting_date" data-role="panel" data-position="right" data-display="overlay" style="width: 350px !important;">
-    <input id="id_date_selector" name="date_selector" type="date"
-           data-role="datebox"
-           data-options='{"mode": "calbox",
-                       "useInline": true,
-                       "afterToday": true,
-                       "overrideDateFormat": "%d.%m.%Y",
-                       "defaultValue": [{{ edit_form.instance.meeting_date|date:"Y,n,j" }}]}'>
-
-    <input id="id_time_selector" name="time_selector" type="date"
-           data-role="datebox"
-           data-options='{"mode": "timebox",
-                       "useInline": true,
-                       "useSetButton": false,
-                       "useImmediate": true,
-                       "minuteStep": 5,
-                       "defaultValue": "{{ edit_form.instance.meeting_date|date:"H:i" }}"}'>
-</div>
-
-<div id="id_panel_starting_point" data-role="panel" data-position="right" data-display="overlay">
-    {% for starting_point in starting_points %}
-        <input type="button" value="{{ starting_point }}" class="starting_point_option">
-    {% endfor %}
-</div>
-
-<div id="id_panel_track_name" data-role="panel" data-position="right" data-display="overlay">
-    {% for track_name in track_names %}
-        <input type="button" value="{{ track_name }}" class="track_name_option">
-    {% endfor %}
-</div>
-{% endblock %}
-
 {% block scripts %}
 <script>
-    {% if contact_phones|length > 0 %}
-    $(document).on('pageinit', function() {
-        $('#{{ edit_form.contact_phone.id_for_label }}').click(function() {
-            $('#id_panel_contact_phone').panel('open');
-        })
-    });
-
-    $(document).on('pageinit', function() {
-        $('.contact_phone_option').click(function() {
-            $('#{{ edit_form.contact_phone.id_for_label }}').val($(this).val());
-            $('#id_panel_contact_phone').panel('close');
-        })
-    });
-    {% endif %}
-
-    $(document).on('pageinit', function() {
-        $('#{{ edit_form.meeting_date.id_for_label }}').click(function() {
-            $('#id_panel_meeting_date').panel('open');
-        })
-    });
-
+    // Update the real but hidden input field each time the date selector changes
     $(document).on('pageinit', function() {
         $('#id_date_selector').bind('change', function(e,p) {
             var pattern = /\d{2}\.\d{2}\.\d{4}/g;
@@ -152,6 +110,7 @@
         })
     });
 
+    // Update the real but hidden input field each time the time selector changes
     $(document).on('pageinit', function() {
         $('#id_time_selector').bind('change', function(e,p) {
             var pattern = /\d{2}:\d{2}/g;
@@ -168,35 +127,5 @@
             $('#{{ edit_form.meeting_date.id_for_label }}').val(value);
         })
     });
-
-    {% if starting_points|length > 0 %}
-    $(document).on('pageinit', function() {
-        $('#{{ edit_form.starting_point.id_for_label }}').click(function() {
-            $('#id_panel_starting_point').panel('open');
-        })
-    });
-
-    $(document).on('pageinit', function() {
-        $('.starting_point_option').click(function() {
-            $('#{{ edit_form.starting_point.id_for_label }}').val($(this).val());
-            $('#id_panel_starting_point').panel('close');
-        })
-    });
-    {% endif %}
-
-    {% if track_names|length > 0 %}
-    $(document).on('pageinit', function() {
-        $('#{{ edit_form.track_name.id_for_label }}').click(function() {
-            $('#id_panel_track_name').panel('open');
-        })
-    });
-
-    $(document).on('pageinit', function() {
-        $('.track_name_option').click(function() {
-            $('#{{ edit_form.track_name.id_for_label }}').val($(this).val());
-            $('#id_panel_track_name').panel('close');
-        })
-    });
-    {% endif %}
 </script>
 {% endblock %}
