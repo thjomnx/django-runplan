@@ -1,0 +1,9 @@
+{% load url from future %}
+{% load i18n %}
+
+{% for shout in shouts|slice:':15' %}
+    <p class="compact small">{{ shout.create_date }}</p>
+    <p class="compact">{{ shout.author.get_full_name }}: {{ shout.shout_text }}</p>
+{% empty %}
+    <p>{% trans 'No shouts yet.' %}</p>
+{% endfor %}

@@ -6,8 +6,8 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
-from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm, SettingsForm
-from runplan.models import Run, Activity, Observation, Transport, Booking
+from runplan.forms import RunForm, CommentForm, AttendanceForm, TransportForm, ShoutForm, SettingsForm
+from runplan.models import Run, Activity, Observation, Transport, Booking, Shout
 from runplan.notifiers import Notification
 from runplan.settings import *
 from runplan.utils import *
@@ -15,11 +15,11 @@ from runplan.utils import *
 @login_required
 @user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def index(request):
-    all_runs = Run.objects.order_by('-meeting_date')[:INDEX_LIMIT]
+    all_runs = Run.objects.order_by('-meeting_date')[:RUNS_LIMIT]
     
     threshold = timezone.now() + MEETTIME_THRESHOLD
-    planned_runs = Run.objects.filter(meeting_date__gt=threshold).order_by('meeting_date')[:INDEX_LIMIT]
-    past_runs = Run.objects.filter(meeting_date__lt=threshold).order_by('-meeting_date')[:INDEX_LIMIT]
+    planned_runs = Run.objects.filter(meeting_date__gt=threshold).order_by('meeting_date')[:RUNS_LIMIT]
+    past_runs = Run.objects.filter(meeting_date__lt=threshold).order_by('-meeting_date')[:RUNS_LIMIT]
     
     if request.mobile:
         template = 'runplan/index-mobile.html'
@@ -35,7 +35,7 @@ def index(request):
 @login_required
 @user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
 def activity(request):
-    activities = Activity.objects.order_by('-create_date')[:INDEX_LIMIT]
+    activities = Activity.objects.order_by('-create_date')[:ACTIVITY_LIMIT]
     
     if request.mobile:
         template = 'runplan/activity-mobile.html'
@@ -440,6 +440,33 @@ def transport_freeseat(request, runplan_id, transport_id):
     Notification(request=request, run=run, code='run.transport.freeseat').send()
     
     return HttpResponseRedirect(reverse('runplan.views.detail', args=(run.id,)))
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
+def shouts(request):
+    shouts = Shout.objects.order_by('-create_date')[:SHOUTS_LIMIT]
+    
+    if request.method == 'POST':
+        shout_form = ShoutForm(request.POST)
+        
+        if shout_form.is_valid():
+            c = shout_form.save(commit=False)
+            c.author = request.user
+            c.save()
+            
+            return HttpResponseRedirect(reverse('runplan.views.index'))
+    else:
+        shout_form = ShoutForm()
+    
+    if request.mobile:
+        template = 'runplan/shouts-mobile.html'
+    else:
+        template = 'runplan/shouts.html'
+    
+    return render(request, template, {
+        'shout_form': shout_form,
+        'shouts': shouts,
+    })
 
 @login_required
 @user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)

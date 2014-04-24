@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.forms import ModelForm, DateTimeField
 from django.utils.translation import ugettext_lazy as _
 
-from runplan.models import Run, Comment, Attendance, Transport, Settings
+from runplan.models import Run, Comment, Attendance, Transport, Shout, Settings
 from runplan.settings import *
 from runplan.validators import *
 
@@ -52,6 +52,14 @@ class TransportForm(ModelForm):
     
     def clean_remarks(self):
         return self.cleaned_data.get('remarks', '').strip()
+
+class ShoutForm(ModelForm):
+    class Meta:
+        model = Shout
+        exclude = ('author',)
+    
+    def clean_shout_text(self):
+        return self.cleaned_data.get('shout_text', '').strip()
 
 class SettingsForm(ModelForm):
     class Meta:

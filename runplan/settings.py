@@ -7,8 +7,11 @@ from django.utils.translation import ugettext as _
 AUTH_GROUP_NAME='runplan-users'
 NOPERM_TARGET='/accounts/noperm/'
 
+RUNS_LIMIT=50
+ACTIVITY_LIMIT=50
+SHOUTS_LIMIT=10
+
 MEETTIME_THRESHOLD=datetime.timedelta(minutes=15)
-INDEX_LIMIT=50
 
 EMAIL_FROM_ADDR = '<from address used for e-mail notification>'
 

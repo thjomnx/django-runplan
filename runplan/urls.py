@@ -5,6 +5,7 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns('runplan.views',
     url(r'^$', 'index'),
     url(r'^activity/$', 'activity'),
+    url(r'^shouts/$', 'shouts'),
     url(r'^create/$', 'create'),
     url(r'^(?P<runplan_id>\d+)/$', 'detail'),
     url(r'^(?P<runplan_id>\d+)/edit/$', 'edit'),

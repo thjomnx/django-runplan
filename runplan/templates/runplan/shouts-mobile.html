@@ -1,0 +1,29 @@
+{% extends "base-mobile.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Shouts' %}
+{% endblock %}
+
+{% block header %}
+<h1>{% trans 'Shouts' %}</h1>
+
+<div data-role="navbar" data-iconpos="bottom">
+    <ul>
+        <li><a href="{% url 'runplan.views.index' %}" data-transition="fade" data-theme="b">{% trans 'Planned' %}</a></li>
+        <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b">{% trans 'Activity' %}</a></li>
+        <li><a href="{% url 'runplan.views.shouts' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{% trans 'Shouts' %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<ul data-role="listview" data-inset="false" data-filter="false">
+    {% for shout in shouts|slice:':15' %}
+        <li>{{ shout.author.get_full_name }}: {{ shout.shout_text }}</li>
+    {% empty %}
+        <p>{% trans 'No shouts yet.' %}</p>
+    {% endfor %}
+</ul>
+{% endblock %}

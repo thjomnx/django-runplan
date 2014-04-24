@@ -107,6 +107,15 @@ class Booking(models.Model):
         return "{0} on {1}".format(self.author.username, self.transport)
 
 @python_2_unicode_compatible
+class Shout(models.Model):
+    author = models.ForeignKey(User)
+    create_date = models.DateTimeField('creation date', auto_now_add=True)
+    shout_text = models.TextField(_('shout text'))
+    
+    def __str__(self):
+        return "{0} on {1}".format(self.author.username, self.create_date.isoformat())
+
+@python_2_unicode_compatible
 class Settings(models.Model):
     account = models.ForeignKey(User)
     last_change = models.DateTimeField('last changed', auto_now=True)

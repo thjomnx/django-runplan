@@ -28,9 +28,32 @@
         });
     }
 
+    function shouts() {
+        $.ajax({
+            url: '{% url 'runplan.views.shouts' %}',
+            cache: false
+        }).done(function(data) {
+            var obj = $('#id_shouts');
+
+            if (obj.html() != data) {
+                obj.hide().html(data).fadeIn('slow');
+            }
+        }).fail(function() {
+            var obj = $('#id_shouts');
+            var error = '<span style="color: red;">Moar uurghh ... sorry!</span>';
+
+            if (obj.html() != error) {
+                obj.hide().html(error).fadeIn('slow');
+            }
+        });
+    }
+
     $(function() {
         activity();
         setInterval('activity()', 15000);
+
+        shouts();
+        setInterval('shouts()', 5000);
     });
 </script>
 {% endblock %}
@@ -77,6 +100,10 @@
         {% else %}
             <p>{% trans 'Neither past nor planned runs yet.' %}</p>
         {% endif %}
+    </div>
+    <div class="span6">
+        <h3>{% trans 'Latest shouts' %}</h3>
+        <div id="id_shouts"></div>
     </div>
     <div class="span6">
         <h3>{% trans 'Current activity' %}</h3>
