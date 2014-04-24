@@ -446,6 +446,18 @@ def transport_freeseat(request, runplan_id, transport_id):
 def shouts(request):
     shouts = Shout.objects.order_by('-create_date')[:SHOUTS_LIMIT]
     
+    if request.mobile:
+        template = 'runplan/shouts-mobile.html'
+    else:
+        template = 'runplan/shouts.html'
+    
+    return render(request, template, {
+        'shouts': shouts,
+    })
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
+def shout_create(request):
     if request.method == 'POST':
         shout_form = ShoutForm(request.POST)
         
@@ -459,13 +471,12 @@ def shouts(request):
         shout_form = ShoutForm()
     
     if request.mobile:
-        template = 'runplan/shouts-mobile.html'
+        template = 'runplan/shout_create-mobile.html'
     else:
-        template = 'runplan/shouts.html'
+        template = 'runplan/shout_create.html'
     
     return render(request, template, {
         'shout_form': shout_form,
-        'shouts': shouts,
     })
 
 @login_required
