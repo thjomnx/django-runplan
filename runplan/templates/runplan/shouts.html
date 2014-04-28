@@ -2,10 +2,8 @@
 {% load i18n %}
 
 {% for shout in shouts|slice:':15' %}
-    <div>
-        <p class="compact small">{{ shout.author.get_full_name }} {% trans 'wrote on' %} {{ shout.create_date }}</p>
-        <p class="compact">{{ shout.shout_text }}</p>
-    </div>
+    <p class="compact small">{{ shout.author.get_full_name }} {% trans 'wrote on' %} {{ shout.create_date }}</p>
+    <p class="compact medium">{{ shout.shout_text }}</p>
 {% empty %}
     <p>{% trans 'No shouts yet.' %}</p>
 {% endfor %}

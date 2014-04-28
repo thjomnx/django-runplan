@@ -15,7 +15,7 @@
         }).done(function(data) {
             var obj = $('#id_activity');
 
-            if (obj.html() != data) {
+            if (obj.html() !== data) {
                 obj.hide().html(data).fadeIn('slow');
             }
         }).fail(function() {
@@ -35,7 +35,7 @@
         }).done(function(data) {
             var obj = $('#id_shouts');
 
-            if (obj.html() != data) {
+            if (obj.html() !== data) {
                 obj.hide().html(data).fadeIn('slow');
             }
         }).fail(function() {
@@ -55,7 +55,7 @@
         }).done(function(data) {
             var obj = $('#id_shout_form');
 
-            if (obj.html() != data) {
+            if (obj.html() !== data) {
                 obj.hide().html(data).fadeIn('slow');
             }
         }).fail(function() {

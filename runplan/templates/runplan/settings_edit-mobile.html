@@ -9,6 +9,14 @@
 {% block header %}
 <h1>{{ t_settings }}</h1>
 <a data-rel="back" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back' %}</a>
+
+<div data-role="navbar" data-iconpos="bottom">
+    <ul>
+        <li><a href="{% url 'bochumrun.views.account_profile' %}" data-transition="fade" data-theme="b">{{ t_account }}</a></li>
+        <li><a href="{% url 'bochumrun.views.password_change' %}" data-transition="fade" data-theme="b">{{ t_password }}</a></li>
+        <li><a href="{% url 'runplan.views.settings_edit' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{{ t_settings }}</a></li>
+    </ul>
+</div>
 {% endblock %}
 
 {% block content %}

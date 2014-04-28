@@ -9,10 +9,12 @@
 {% block header %}
 <h1>{% trans 'Planned' %}</h1>
 <a href="{% url 'runplan.views.create' %}" data-icon="plus" data-iconpos="left" class="ui-btn-left">{% trans 'New' %}</a>
+<a href="{% url 'bochumrun.views.account_profile' %}" data-icon="edit" data-iconpos="right" class="ui-btn-right">{{ t_account }}</a>
 
 <div data-role="navbar" data-iconpos="bottom">
     <ul>
         <li><a href="{% url 'runplan.views.index' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{% trans 'Planned' %}</a></li>
+        <li><a href="{% url 'runplan.views.shouts' %}" data-transition="fade" data-theme="b">{% trans 'Shouts' %}</a></li>
         <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b">{% trans 'Activity' %}</a></li>
     </ul>
 </div>

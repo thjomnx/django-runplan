@@ -466,7 +466,12 @@ def shout_create(request):
             c.author = request.user
             c.save()
             
-            return HttpResponseRedirect(reverse('runplan.views.index'))
+            next = request.POST.get('next', None)
+            
+            if (next):
+                return HttpResponseRedirect(next)
+            else:
+                return HttpResponseRedirect(reverse('runplan.views.index'))
     else:
         shout_form = ShoutForm()
     
@@ -492,7 +497,7 @@ def settings_edit(request):
             r.author = request.user
             r.save()
             
-            return HttpResponseRedirect(reverse('runplan.views.index'))
+            return HttpResponseRedirect(reverse('runplan.views.settings_edit'))
     else:
         edit_form = SettingsForm(instance=settings)
     

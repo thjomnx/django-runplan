@@ -7,13 +7,14 @@
 {% endblock %}
 
 {% block header %}
-<h1>{% trans 'Shouts' %}</h1>
+<h1>{% trans 'New shout' %}</h1>
+<a href="{% url 'runplan.views.shouts' %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Cancel' %}</a>
 
 <div data-role="navbar" data-iconpos="bottom">
     <ul>
         <li><a href="{% url 'runplan.views.index' %}" data-transition="fade" data-theme="b">{% trans 'Planned' %}</a></li>
-        <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b">{% trans 'Activity' %}</a></li>
         <li><a href="{% url 'runplan.views.shouts' %}" data-transition="fade" data-theme="b" class="ui-btn-active ui-state-persist">{% trans 'Shouts' %}</a></li>
+        <li><a href="{% url 'runplan.views.activity' %}" data-transition="fade" data-theme="b">{% trans 'Activity' %}</a></li>
     </ul>
 </div>
 {% endblock %}
@@ -22,6 +23,7 @@
 <form action="{% url 'runplan.views.shout_create' %}" method="post">
     {% csrf_token %}
     {{ shout_form.as_p }}
+    <input type="hidden" name="next" value="{% url 'runplan.views.shouts' %}">
     <input type="submit" value="{% trans 'Shout' %}" class="btn btn-mini btn-success"/>
 </form>
 {% endblock %}
