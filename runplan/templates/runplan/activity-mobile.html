@@ -8,7 +8,7 @@
 
 {% block header %}
 <h1>{% trans 'Activity' %}</h1>
-<a href="{% url 'bochumrun.views.account_profile' %}" data-icon="edit" data-iconpos="right" class="ui-btn-right">{{ t_account }}</a>
+<a href="#" id="id_activity_refresh" data-icon="refresh" data-iconpos="right" class="ui-btn-right">{% trans 'Refresh' %}</a>
 
 <div data-role="navbar" data-iconpos="bottom">
     <ul>
@@ -23,32 +23,21 @@
 <ul data-role="listview" data-inset="false" data-filter="false">
     {% for activity in activities|slice:':15' %}
         <li>
-            <a href="{% url 'runplan.views.detail' activity.run.id %}">
-                {% if activity.code == 'run.create' %}
-                    {{ activity.author.get_full_name }} hat neuen Lauf geplant
-                {% elif activity.code == 'run.edit' %}
-                    {{ activity.author.get_full_name }} hat Laufdetails aktualisiert
-                {% elif activity.code == 'run.cancel' %}
-                    {{ activity.author.get_full_name }} hat Lauf abgesagt
-                {% elif activity.code == 'run.attend' %}
-                    {{ activity.author.get_full_name }} meldet Teilnahme an <strong>"{{ activity.run.track_name }}"</strong>
-                {% elif activity.code == 'run.revoke' %}
-                    {{ activity.author.get_full_name }} hat Teilnahme an <strong>"{{ activity.run.track_name }}"</strong> zurückgezogen
-                {% elif activity.code == 'run.transport.offer' %}
-                    {{ activity.author.get_full_name }} hat Mitfahrgelegenheit für <strong>"{{ activity.run.track_name }}"</strong> angeboten
-                {% elif activity.code == 'run.transport.edit' %}
-                    {{ activity.author.get_full_name }} hat Mitfahrgelegenheit für <strong>"{{ activity.run.track_name }}"</strong> aktualisiert
-                {% elif activity.code == 'run.transport.cancel' %}
-                    {{ activity.author.get_full_name }} hat Mitfahrgelegenheit für <strong>"{{ activity.run.track_name }}"</strong> zurückgezogen
-                {% elif activity.code == 'run.transport.takeseat' %}
-                    {{ activity.author.get_full_name }} hat Platz in <strong>"{{ activity.run.track_name }}"</strong> gebucht
-                {% elif activity.code == 'run.transport.freeseat' %}
-                    {{ activity.author.get_full_name }} hat Platz in <strong>"{{ activity.run.track_name }}"</strong> freigegeben
-                {% endif %}
-            </a>
+            <a href="{% url 'runplan.views.detail' activity.run.id %}">{{ activity.text }}</a>
         </li>
     {% empty %}
         <p>{% trans 'No activity yet.' %}</p>
     {% endfor %}
 </ul>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Refresh page upon button click
+    $(document).on('pageinit', function() {
+        $('#id_activity_refresh').bind('click', function(e,p) {
+            location.reload(true);
+        })
+    });
+</script>
 {% endblock %}

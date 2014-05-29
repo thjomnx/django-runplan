@@ -4,15 +4,19 @@ import datetime
 
 from django.utils.translation import ugettext as _
 
+# Authentication and authorization
 AUTH_GROUP_NAME='runplan-users'
 NOPERM_TARGET='/accounts/noperm/'
 
+# Query limits
 RUNS_LIMIT=50
-ACTIVITY_LIMIT=50
+ACTIVITY_LIMIT=15
 SHOUTS_LIMIT=10
 
+# Timing thresholds
 MEETTIME_THRESHOLD=datetime.timedelta(minutes=15)
 
+# Email settings
 EMAIL_FROM_ADDR = '<from address used for e-mail notification>'
 
 EMAIL_SUBJECT_PREFIX = _('[runplan] ')
@@ -44,3 +48,6 @@ EMAIL_BODY_TEMPLATES = {
     'run.transport.takeseat': _("""Link: %(link)s"""),
     'run.transport.freeseat': _("""Link: %(link)s"""),
 }
+
+# Activity settings
+ACTIVITY_TEXT_TEMPLATES = EMAIL_SUBJECT_TEMPLATES

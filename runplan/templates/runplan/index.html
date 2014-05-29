@@ -8,7 +8,25 @@
 
 {% block scripts %}
 <script>
-    function activity() {
+    var activity_last_update = -1;
+    var shouts_last_update = -1;
+
+    function activity_last() {
+        $.ajax({
+            url: '{% url 'runplan.views.activity_last' %}',
+            cache: false
+        }).done(function(data) {
+            if (data.timestamp > activity_last_update) {
+                activity_reload();
+                activity_last_update = data.timestamp;
+            }
+        }).fail(function() {
+            ajax_fail('#id_activity');
+            activity_last_update = -1;
+        });
+    }
+
+    function activity_reload() {
         $.ajax({
             url: '{% url 'runplan.views.activity' %}',
             cache: false
@@ -19,16 +37,27 @@
                 obj.hide().html(data).fadeIn('slow');
             }
         }).fail(function() {
-            var obj = $('#id_activity');
-            var error = '<span style="color: red;">Moar uurghh ... sorry!</span>';
-
-            if (obj.html() != error) {
-                obj.hide().html(error).fadeIn('slow');
-            }
+            ajax_fail('#id_activity');
+            activity_last_update = -1;
         });
     }
 
-    function shouts() {
+    function shouts_last() {
+        $.ajax({
+            url: '{% url 'runplan.views.shouts_last' %}',
+            cache: false
+        }).done(function(data) {
+            if (data.timestamp > shouts_last_update) {
+                shouts_reload();
+                shouts_last_update = data.timestamp;
+            }
+        }).fail(function() {
+            ajax_fail('#id_shouts');
+            shouts_last_update = -1;
+        });
+    }
+
+    function shouts_reload() {
         $.ajax({
             url: '{% url 'runplan.views.shouts' %}',
             cache: false
@@ -39,12 +68,8 @@
                 obj.hide().html(data).fadeIn('slow');
             }
         }).fail(function() {
-            var obj = $('#id_shouts');
-            var error = '<span style="color: red;">Moar uurghh ... sorry!</span>';
-
-            if (obj.html() != error) {
-                obj.hide().html(error).fadeIn('slow');
-            }
+            ajax_fail('#id_shouts');
+            shouts_last_update = -1;
         });
     }
 
@@ -59,21 +84,25 @@
                 obj.hide().html(data).fadeIn('slow');
             }
         }).fail(function() {
-            var obj = $('#id_shout_form');
+            ajax_fail('#id_shout_form');
+        });
+    }
+
+    function ajax_fail(id) {
+        var obj = $(id);
             var error = '<span style="color: red;">Moar uurghh ... sorry!</span>';
 
             if (obj.html() != error) {
                 obj.hide().html(error).fadeIn('slow');
             }
-        });
     }
 
     $(function() {
-        activity();
-        setInterval('activity()', 15000);
+        activity_last();
+        setInterval('activity_last()', 10000);
 
-        shouts();
-        setInterval('shouts()', 5000);
+        shouts_last();
+        setInterval('shouts_last()', 5000);
 
         shout_create();
     });

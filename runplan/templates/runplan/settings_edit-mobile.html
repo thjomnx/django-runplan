@@ -8,7 +8,7 @@
 
 {% block header %}
 <h1>{{ t_settings }}</h1>
-<a data-rel="back" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back' %}</a>
+<a href="{% url 'runplan.views.index' %}" data-icon="back" data-iconpos="left" class="ui-btn-left">{% trans 'Back' %}</a>
 
 <div data-role="navbar" data-iconpos="bottom">
     <ul>

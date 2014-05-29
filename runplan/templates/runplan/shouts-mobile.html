@@ -9,7 +9,7 @@
 {% block header %}
 <h1>{% trans 'Shouts' %}</h1>
 <a href="{% url 'runplan.views.shout_create' %}" data-icon="plus" data-iconpos="left" class="ui-btn-left">{% trans 'New' %}</a>
-<a href="{% url 'bochumrun.views.account_profile' %}" data-icon="edit" data-iconpos="right" class="ui-btn-right">{{ t_account }}</a>
+<a href="#" id="id_shouts_refresh" data-icon="refresh" data-iconpos="right" class="ui-btn-right">{% trans 'Refresh' %}</a>
 
 <div data-role="navbar" data-iconpos="bottom">
     <ul>
@@ -28,4 +28,15 @@
         <p>{% trans 'No shouts yet.' %}</p>
     {% endfor %}
 </ul>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Refresh page upon button click
+    $(document).on('pageinit', function() {
+        $('#id_shouts_refresh').bind('click', function(e,p) {
+            location.reload(true);
+        })
+    });
+</script>
 {% endblock %}

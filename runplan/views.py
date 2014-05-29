@@ -1,8 +1,10 @@
 from __future__ import unicode_literals
 
+import json
+
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
@@ -37,6 +39,13 @@ def index(request):
 def activity(request):
     activities = Activity.objects.order_by('-create_date')[:ACTIVITY_LIMIT]
     
+    for activity in activities:
+        template = ACTIVITY_TEXT_TEMPLATES[activity.code]
+        activity.text = template % {
+            'user': activity.author.get_full_name(),
+            'run': activity.run.track_name
+        }
+    
     if request.mobile:
         template = 'runplan/activity-mobile.html'
     else:
@@ -45,6 +54,16 @@ def activity(request):
     return render(request, template, {
         'activities': activities,
     })
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
+def activity_last(request):
+    activities = Activity.objects.order_by('-create_date')[:ACTIVITY_LIMIT]
+    
+    json_data = {}
+    json_data['timestamp'] = unixtime(activities[0].create_date) if len(activities) > 0 else -1
+    
+    return HttpResponse(json.dumps(json_data), content_type='application/json')
 
 @login_required
 @user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
@@ -454,6 +473,16 @@ def shouts(request):
     return render(request, template, {
         'shouts': shouts,
     })
+
+@login_required
+@user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)
+def shouts_last(request):
+    shouts = Shout.objects.order_by('-create_date')[:SHOUTS_LIMIT]
+    
+    json_data = {}
+    json_data['timestamp'] = unixtime(shouts[0].create_date) if len(shouts) > 0 else -1
+    
+    return HttpResponse(json.dumps(json_data), content_type='application/json')
 
 @login_required
 @user_passes_test(is_runplan_user, login_url=NOPERM_TARGET)

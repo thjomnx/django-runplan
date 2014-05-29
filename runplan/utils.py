@@ -1,11 +1,16 @@
 from __future__ import unicode_literals
 
+import time
+
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
 from runplan.models import Run, Settings
 from runplan.settings import *
+
+def unixtime(date):
+    return int(time.mktime(date.timetuple()) * 1000)
 
 def is_runplan_user(user):
     return get_object_or_404(Group, name=AUTH_GROUP_NAME) in user.groups.all()
