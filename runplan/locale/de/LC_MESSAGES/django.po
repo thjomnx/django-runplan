@@ -457,11 +457,11 @@ msgstr "Keine Läufe vorhanden."
 
 #: templates/runplan/index.html:156
 msgid "Latest shouts"
-msgstr "Letzte Shouts"
+msgstr "Neueste Shouts"
 
 #: templates/runplan/index.html:161
 msgid "Current activity"
-msgstr "Letzte Aktivitäten (live)"
+msgstr "Neueste Aktivitäten"
 
 #: templates/runplan/shout_create-mobile.html:10
 msgid "New shout"
