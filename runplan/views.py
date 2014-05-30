@@ -501,6 +501,8 @@ def shout_create(request):
                 return HttpResponseRedirect(next)
             else:
                 return HttpResponseRedirect(reverse('runplan.views.index'))
+        else:
+            return HttpResponseRedirect(reverse('runplan.views.index'))
     else:
         shout_form = ShoutForm()
     

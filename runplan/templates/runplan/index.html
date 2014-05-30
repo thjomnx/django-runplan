@@ -31,10 +31,10 @@
             url: '{% url 'runplan.views.activity' %}',
             cache: false
         }).done(function(data) {
-            var obj = $('#id_activity');
+            var div = $('#id_activity');
 
-            if (obj.html() !== data) {
-                obj.hide().html(data).fadeIn('slow');
+            if (div.html() !== data) {
+                div.hide().html(data).fadeIn('slow');
             }
         }).fail(function() {
             ajax_fail('#id_activity');
@@ -62,10 +62,10 @@
             url: '{% url 'runplan.views.shouts' %}',
             cache: false
         }).done(function(data) {
-            var obj = $('#id_shouts');
+            var div = $('#id_shouts');
 
-            if (obj.html() !== data) {
-                obj.hide().html(data).fadeIn('slow');
+            if (div.html() !== data) {
+                div.hide().html(data).fadeIn('slow');
             }
         }).fail(function() {
             ajax_fail('#id_shouts');
@@ -78,11 +78,25 @@
             url: '{% url 'runplan.views.shout_create' %}',
             cache: false
         }).done(function(data) {
-            var obj = $('#id_shout_form');
+            var form = $('#id_shout_form');
 
-            if (obj.html() !== data) {
-                obj.hide().html(data).fadeIn('slow');
+            if (form.html() !== data) {
+                form.hide().html(data).fadeIn('slow');
             }
+
+            var textarea = $('#id_shout_form textarea');
+            var button = $('#id_shout_form input');
+
+            button.attr('disabled', 'disabled');
+
+            textarea.bind('input propertychange', function() {
+                if (textarea.val() == '') {
+                    button.attr('disabled', 'disabled');
+                }
+                else {
+                    button.removeAttr('disabled');
+                }
+            });
         }).fail(function() {
             ajax_fail('#id_shout_form');
         });
