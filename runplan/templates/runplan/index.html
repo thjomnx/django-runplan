@@ -90,7 +90,7 @@
             button.attr('disabled', 'disabled');
 
             textarea.bind('input propertychange', function() {
-                if (textarea.val() == '') {
+                if (textarea.val().trim() == '') {
                     button.attr('disabled', 'disabled');
                 }
                 else {
