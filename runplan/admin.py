@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from runplan.models import Run, Comment, Attendance, Transport, Booking, Settings
+from runplan.models import Run, Comment, Attendance, Transport, Booking, Settings, Shout
 
 class AttendanceInline(admin.TabularInline):
     model = Attendance
@@ -24,8 +24,16 @@ class BookingInline(admin.TabularInline):
     model = Booking
 
 class TransportAdmin(admin.ModelAdmin):
+    list_display = ('run', 'author', 'offered_seats', 'create_date', 'last_change')
     inlines = [BookingInline]
+
+class ShoutAdmin(admin.ModelAdmin):
+    list_display = ('author', 'shout_text', 'create_date')
+
+class SettingsAdmin(admin.ModelAdmin):
+    list_display = ('account', 'last_change')
 
 admin.site.register(Run, RunAdmin)
 admin.site.register(Transport, TransportAdmin)
-admin.site.register(Settings)
+admin.site.register(Shout, ShoutAdmin)
+admin.site.register(Settings, SettingsAdmin)
