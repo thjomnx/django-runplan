@@ -34,9 +34,10 @@ nosetests.xml
 .project
 .pydevproject
 
-# Eric4/5 stuff
+# Eric4/5/6 stuff
 .eric4project
 .eric5project
+.eric6project
 .ropeproject
 *.e4p
 *.e4m
